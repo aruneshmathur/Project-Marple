@@ -17,6 +17,7 @@ char* substring(int start, int end, char* str) {
 }
 
 char* generate_k_grams(char* str, int k) {
+
 	int length = strlen(str);
 	int count = length-k+1;
 
@@ -28,16 +29,14 @@ char* generate_k_grams(char* str, int k) {
 	
 	while(i < count) {
 		list[i] = substring(i, i+k, str);
+		printf("%s\n", list[i]);
 		i++;
-		printf("%s", list[i]);
 	}
 }
 
 int main() {
 	
-	//generate_k_grams("Hello there missy!", 3);
-
-	char* str = substring(0,strlen("Hey I'm here!"),"Hey I'm here!");
-	printf("%s\n", str);
+	generate_k_grams("Hello there missy!", 3);
+	
 	return 0;
 }
