@@ -4,21 +4,21 @@
 
 char* substring(int start, int end, char* str) {
 
-	int i = start, len = end-start;
+	int i = start, len = end - start + 1;
 
-	char* new_str = malloc(len * sizeof(char));
+	char* new_str = malloc(len);
 	
 	while(i < end)  *(new_str++) = *(str+i++);	
 	
 	*new_str='\0';
 
-	return new_str-len;
+	return new_str - len + 1;
 }
 
 char** generate_k_grams(char* str, int k) {
 
 	int length = strlen(str);
-	int count = length-k+1;
+	int count = length - k + 1;
 
 	if(count <= 0) return NULL;
 
@@ -30,16 +30,17 @@ char** generate_k_grams(char* str, int k) {
 		list[i] = substring(i, i+k, str);
 		i++;
 	}
+	list[i] = NULL;
 
 	return list;
 }
 
 int main() {
 	
-	char** list = generate_k_grams("Hello there missy!", 6);
+	char** list = generate_k_grams("Hello there madam!", 5);
 	
 	if(list) {
-		while(*list!=NULL) {
+		while(*list) {
 			printf("%s\n", *list++);
 		}
 	}
