@@ -9,9 +9,9 @@ int integer_mod(int a, long long int b) {
 	return ((a % b) + b) % b;
 }
 
-int** generate_hashes(const char* str, int window_size) {
+int** generate_hashes(const char* str, int k) {
 
-	int len = strlen(str), count = len - window_size + 1;
+	int len = strlen(str), count = len - k + 1;
 	int i, j = 1;
 
 	int* ht = malloc(sizeof(int));
@@ -22,12 +22,12 @@ int** generate_hashes(const char* str, int window_size) {
 	int** list = malloc(count * sizeof(int*));
 
 	//Calculate (B^k) -1
-	for(i = 0; i < window_size - 1; i++) {
+	for(i = 0; i < k - 1; i++) {
 		j = integer_mod(j * B, M);
 	}
 
 	// Calculate the initial hash
-	for(i = 0; i < window_size; i++) 
+	for(i = 0; i < k; i++) 
 	    *ht = integer_mod((*ht * B) + str[i], M);
 
 	list[0] = ht;
@@ -36,7 +36,7 @@ int** generate_hashes(const char* str, int window_size) {
 		ht = malloc(sizeof(int));
 		*ht = integer_mod(*list[i-1] - (str[i-1] * j), M);
 		*ht = integer_mod(*ht * B, M);
-		*ht = integer_mod(*ht + str[i + window_size - 1], M);
+		*ht = integer_mod(*ht + str[i + k - 1], M);
 		list[i] = ht;
 	}
 
