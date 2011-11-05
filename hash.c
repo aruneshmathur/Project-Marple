@@ -1,14 +1,17 @@
 #include <string.h>
+#include <stdlib.h>
 #include "hash.h"
 
-int integer_mod(int a, long long int b) {
+int integer_mod(int a, long long b) {
 	return ((a % b) + b) % b;
 }
 
-int** generate_hashes(const char* str, int k) {
+struct file_hashes* generate_hashes(const char* str, int k) {
 
 	int len = strlen(str), count = len - k + 1;
 	int i, j = 1;
+
+	struct file_hashes* result = malloc(sizeof(struct file_hashes));
 
 	int* ht = malloc(sizeof(int));
 	*ht = 0;
@@ -17,12 +20,12 @@ int** generate_hashes(const char* str, int k) {
 	
 	int** list = malloc(count * sizeof(int*));
 
-	//Calculate (B^k) -1
+	/* Calculate (B^k) -1 */
 	for(i = 0; i < k - 1; i++) {
 		j = integer_mod(j * B, M);
 	}
 
-	// Calculate the initial hash
+	/* Calculate the initial hash */
 	for(i = 0; i < k; i++) 
 	    *ht = integer_mod((*ht * B) + str[i], M);
 
@@ -37,8 +40,11 @@ int** generate_hashes(const char* str, int k) {
 	}
 
 	list[i] = NULL;
+
+	result->list = list;
+	result->length = count;
 	
-	return list;
+	return result;
 }
 
 char* substring(int start, int end, char* str) {

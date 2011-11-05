@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -pedantic -Wall -g
+CFLAGS = -pedantic -Wall -g -std=c99
 
 vic-cipher: hash.o main.o 
 	$(CC) $(CFLAGS) -o slce hash.o main.o
