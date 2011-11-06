@@ -10,6 +10,6 @@ winnowing.o: winnowing.c winnowing.h hash.h
 hash.o: hash.c hash.h winnowing.h
 	$(CC) $(CFLAGS) -c hash.c
 
-main.o: main.c hash.h
+main.o: main.c hash.h winnowing.h
 	$(CC) $(CFLAGS) -c main.c
 

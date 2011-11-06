@@ -3,27 +3,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void add(struct hash *start, struct hash *node) {
-	struct hash *temp = start;
+struct hash* add(struct hash *start, struct hash *node) {
 	
-	if(temp == NULL) {
+	if(start == NULL) {
 		start = node;
-		return;
+		return start;
 	}
+
+	struct hash *temp = start;
 		
 	while(temp->next != NULL) {
-		start = start->next; 
+		temp = temp->next; 
 	}
-	
-	start->next = node;
-	return;
+
+	temp->next = node;
+
+	return start;
 }
 
-struct hash* create_node(int val) {
+struct hash* create_node(long long val) {
 	struct hash* node = malloc(sizeof(struct hash));
 	node->value = val;
 	node->next = NULL;
-
 	return node;
 }
 
@@ -33,7 +34,10 @@ struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 	long long global_min;
 
 	struct file_winnow_hash* result = malloc(sizeof(struct file_winnow_hash));
-	struct hash* new_list = result->list;
+	struct hash* new_list;
+	new_list = NULL;
+
+
 
 	int **list = to_winnow->list;
 	
@@ -43,12 +47,12 @@ struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 	global_min = M + 1;
 
 	for(i = param - 1; i >= 0; i--) 
-		if((*list[i]) < global_min) {
-			global_min = (*list[i]);
+		if((*(list[i])) < global_min) {
+			global_min = (*(list[i]));
 			index = i;
 		}
 
-	add(new_list, create_node(global_min));
+	new_list = add(new_list, create_node(global_min));
 	result->count++;
 	
 	if(to_winnow->count < k)  {
@@ -56,18 +60,28 @@ struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 	}
 
 	for(i = 1; i < to_winnow->count - k + 1; i++) {
-		if(i - index >= 0) {
-			for(j = k + i; j >= i; j--) {
-				
+		if(i - index > 0) {
+			global_min = M + 1;
+
+			for(j = k + i - 1; j >= i; j--) 
+				if((*(list[j])) < global_min) {
+					global_min = (*(list[j]));
+					index = j;
 			}
+
+			new_list = add(new_list, create_node(global_min));			
+			result->count++;
+
 		} else {
-			if(*list[k+i] < global_min) {
-				global_min = *list[k+i];
-				index = i;
-				add(new_list, create_node(global_min));
+			if(*list[k + i - 1] < global_min) {
+				global_min = *(list[k + i - 1]);
+				index = k + i - 1;
+				new_list = add(new_list, create_node(global_min));
+				result->count++;
 			}
 		}
 	}
-
+	
+	result->list = new_list;
 	return result;
 }

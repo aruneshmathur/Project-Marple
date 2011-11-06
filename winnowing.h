@@ -3,7 +3,7 @@
 #define MIN -1
 
 struct hash {
-	int value;
+	long long value;
 	struct hash* next;
 };
 
@@ -12,7 +12,7 @@ struct file_winnow_hash {
 	int count;
 };
 
-struct hash* create_node(int val);
+struct hash* create_node(long long val);
 struct file_winnow_hash* winnowing(struct file_hash*, int);
 
 #endif
