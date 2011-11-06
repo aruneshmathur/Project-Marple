@@ -5,7 +5,7 @@
 
 struct file_hashes {
 	int **list;
-	int length;
+	size_t length;
 };
 
 int integer_mod(int, long long);

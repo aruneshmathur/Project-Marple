@@ -3,11 +3,12 @@
 #include<stdlib.h>
 #include<math.h>
 #include "hash.h"
+#include "winnowing.h"
 
 
 int main() {
 	
-	/*char** list = generate_k_grams("Hello there madam!", 5);*/
+	/*char** list = generate_k_grams("Hello there madam!", 5);
 	struct file_hashes* result = generate_hashes("Hello there madam!", 5);
 	
 	if(result) {
@@ -16,7 +17,7 @@ int main() {
 			*(result->list)++;
 		}
 	}
-
+	*/
 	
 
 	return 0;
