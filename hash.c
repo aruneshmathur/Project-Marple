@@ -1,17 +1,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include "hash.h"
+#include "winnowing.h"
 
 int integer_mod(int a, long long b) {
 	return ((a % b) + b) % b;
 }
 
-struct file_hashes* generate_hashes(const char* str, int k) {
+struct file_hash* generate_hashes(const char* str, int k) {
 
 	int len = strlen(str), count = len - k + 1;
 	int i, j = 1;
 
-	struct file_hashes* result = malloc(sizeof(struct file_hashes));
+	struct file_hash* result = malloc(sizeof(struct file_hash));
 
 	int* ht = malloc(sizeof(int));
 	*ht = 0;
@@ -42,7 +43,7 @@ struct file_hashes* generate_hashes(const char* str, int k) {
 	list[i] = NULL;
 
 	result->list = list;
-	result->length = count;
+	result->count = count;
 	
 	return result;
 }
