@@ -29,7 +29,7 @@ struct hash* create_node(int val) {
 
 struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 	
-	int param, i, index;
+	int param, i, index, j;
 	long long global_min;
 
 	struct file_winnow_hash* result = malloc(sizeof(struct file_winnow_hash));
@@ -57,13 +57,15 @@ struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 
 	for(i = 1; i < to_winnow->count - k + 1; i++) {
 		if(i - index >= 0) {
-			
+			for(j = k + i; j >= i; j--) {
+				
+			}
 		} else {
 			if(*list[k+i] < global_min) {
 				global_min = *list[k+i];
 				index = i;
+				add(new_list, create_node(global_min));
 			}
-			add(new_list, create_node(global_min));
 		}
 	}
 
