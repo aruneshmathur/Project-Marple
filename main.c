@@ -4,11 +4,14 @@
 #include<math.h>
 #include "hash.h"
 #include "winnowing.h"
+#include "list.h"
 
 
 int main() {
 	
 	struct file_hash* result = generate_hashes("Hello there madam!", 5);
+	result->project_name = "GNU Make";
+	result->file_name = "/home/aruneshmathur/file.c";
 	
 	/*printf("Hashes\n");
 	printf("========\n");

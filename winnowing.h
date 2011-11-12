@@ -9,10 +9,12 @@ struct hash {
 
 struct file_winnow_hash {
 	struct hash *list;
+	char *name;
 	int count;
+	char *file_name;
+	char *project_name;
 };
 
-struct hash* create_node(long long val);
 struct file_winnow_hash* winnowing(struct file_hash*, int);
 
 #endif

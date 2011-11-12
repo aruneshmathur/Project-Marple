@@ -6,6 +6,8 @@
 struct file_hash {
 	long long **list;
 	int count;
+	char *file_name;
+	char *project_name;
 };
 
 long long integer_mod(int, long long);
