@@ -39,7 +39,7 @@ struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 
 
 
-	int **list = to_winnow->list;
+	long long **list = to_winnow->list;
 	
 	if(to_winnow->count < k)  param = to_winnow->count; 
 	else param = k;

@@ -3,7 +3,7 @@
 #include "hash.h"
 #include "winnowing.h"
 
-int integer_mod(int a, long long b) {
+long long integer_mod(int a, long long b) {
 	return ((a % b) + b) % b;
 }
 
@@ -14,12 +14,12 @@ struct file_hash* generate_hashes(const char* str, int k) {
 
 	struct file_hash* result = malloc(sizeof(struct file_hash));
 
-	int* ht = malloc(sizeof(int));
+	long long* ht = malloc(sizeof(long long));
 	*ht = 0;
 
 	if(count <= 0) return NULL;
 	
-	int** list = malloc(count * sizeof(int*));
+	long long** list = malloc(count * sizeof(long long*));
 
 	/* Calculate (B^k) -1 */
 	for(i = 0; i < k - 1; i++) {
@@ -33,7 +33,7 @@ struct file_hash* generate_hashes(const char* str, int k) {
 	list[0] = ht;
 
 	for(i = 1; i < count; i++) {
-		ht = malloc(sizeof(int));
+		ht = malloc(sizeof(long long));
 		*ht = integer_mod(*list[i-1] - (str[i-1] * j), M);
 		*ht = integer_mod(*ht * B, M);
 		*ht = integer_mod(*ht + str[i + k - 1], M);
