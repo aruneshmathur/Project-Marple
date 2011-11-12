@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -pedantic -Wall -g -std=c99
 
-vic-cipher: winnowing.o hash.o main.o
+slce: winnowing.o hash.o main.o
 	$(CC) $(CFLAGS) -o slce winnowing.o hash.o main.o
 
 winnowing.o: winnowing.c winnowing.h hash.h
@@ -12,4 +12,7 @@ hash.o: hash.c hash.h winnowing.h
 
 main.o: main.c hash.h winnowing.h
 	$(CC) $(CFLAGS) -c main.c
+
+clean: 
+	rm *~ *.o ./slce
 
