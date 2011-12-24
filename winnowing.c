@@ -83,7 +83,5 @@ struct file_winnow_hash* winnowing(struct file_hash* to_winnow, int k) {
 	}
 	
 	result->list = new_list;
-	result->project_name = to_winnow->project_name;
-	result->file_name = to_winnow->file_name;
 	return result;
 }

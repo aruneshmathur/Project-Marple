@@ -1,13 +1,11 @@
 #ifndef HASHING
 #define HASHING
-#define B 101
+#define B 137
 #define M 5463458053
 
 struct file_hash {
 	long long **list;
 	int count;
-	char *file_name;
-	char *project_name;
 };
 
 long long integer_mod(int, long long);

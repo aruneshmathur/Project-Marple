@@ -10,15 +10,9 @@
 int main() {
 	
 	struct file_hash* result = generate_hashes("Hello there madam!", 5);
-	result->project_name = "GNU Make";
-	result->file_name = "/home/aruneshmathur/file.c";
 	
-	/*printf("Hashes\n");
-	printf("========\n");
-
-	printf("%d**\n", *((result->list)[0]));
 	
-	if(result) {
+	/*if(result) {
 		while(*(result->list)) {
 			printf("%d\n", **(result->list));
 			*(result->list)++;
@@ -27,6 +21,7 @@ int main() {
 	
 
 	struct file_winnow_hash	*win = winnowing(result, 4);
+
 	struct hash *list = win->list;
 
 	while(list != NULL) {
