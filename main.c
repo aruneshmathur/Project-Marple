@@ -12,22 +12,22 @@ int main() {
 	struct file_hash* result = generate_hashes("Hello there madam!", 5);
 	
 	
-	/*if(result) {
+	if(result) {
 		while(*(result->list)) {
-			printf("%d\n", **(result->list));
+			printf("%lld\n", **(result->list));
 			*(result->list)++;
 		}
-	}*/
+	}
 	
 
-	struct file_winnow_hash	*win = winnowing(result, 4);
+	/*struct file_winnow_hash	*win = winnowing(result, 4);
 
 	struct hash *list = win->list;
 
 	while(list != NULL) {
 		printf("%llu\n", list->value);
 		list = list->next;
-	}
+	}*/
 
 	return 0;
 }
