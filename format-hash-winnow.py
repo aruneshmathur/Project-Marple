@@ -1,11 +1,12 @@
 #!/usr/bin/python
 M = 5463458053
+B = 137
 
 def stripchars(s, chars):
     return s.translate(None, chars)
 
 
-def generate_hashes(string, k = 10, B = 137):
+def gen_hash_list(string, k = 5):
     hash_list = []
 
     length = len(string)
@@ -35,7 +36,7 @@ def generate_hashes(string, k = 10, B = 137):
     return hash_list
 
 
-def winnow(hash_list=[], w = 15):
+def winnow(hash_list=[], w = 4):
 
     winnow_list = []
     hash_list_length = len(hash_list)
@@ -62,8 +63,24 @@ def winnow(hash_list=[], w = 15):
             global_min = M + 1
 
             for j in range(w + i - 1, i - 1, -1):
+                if hash_list[j] < global_min:
+                    global_min = hash_list[j]
+                    index = j
+
+            winnow_list.append(global_min)
+
+        else:
+            if hash_list[w + i - 1] < global_min:
+                global_min = hash_list[w + i - 1]
+                index = w + i - 1;
+                winnow_list.append(global_min)
+
+
+    return winnow_list
 
     
+
 if __name__ == "__main__":
 
-    winnow(generate_hashes("Hello there madam!"), 4), 
+    for i in winnow(gen_hash_list("Hello there madam!", 5), 4):
+        print i
