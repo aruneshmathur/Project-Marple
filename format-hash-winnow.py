@@ -18,10 +18,11 @@ def gen_hash_list(string, k = 5):
     t = 0
     j = 1
 
-    # Calculate ((B ^ k) - 1) once
+    #Calculate ((B ^ k) - 1) once
     for i in range(0, k - 1):
         j = (j * B) % M
-    
+
+    #The initial hash
     for i in range(0, k):
         t = ((t * B) + ord(string[i])) % M
 
@@ -35,6 +36,8 @@ def gen_hash_list(string, k = 5):
 
     return hash_list
 
+def record(hash_list, i):
+    return (hash_list[i], i)
 
 def winnow(hash_list=[], w = 4):
 
@@ -64,15 +67,13 @@ def winnow(hash_list=[], w = 4):
 
             for j in range(w + i - 1, i - 1, -1):
                 if hash_list[j] < global_min:
-                    global_min = hash_list[j]
-                    index = j
+                    (global_min, index) = record(hash_list, j)
 
             winnow_list.append(global_min)
 
         else:
             if hash_list[w + i - 1] < global_min:
-                global_min = hash_list[w + i - 1]
-                index = w + i - 1;
+                (global_min, index) = record(hash_list, w + i - 1)
                 winnow_list.append(global_min)
 
 
