@@ -6,9 +6,10 @@ def stripchars(s, chars):
     return s.translate(None, chars)
 
 
-def gen_hash_list(string, k = 5):
+def gen_hash_list(line_def, k = 5):
     hash_list = []
 
+    string = line_def[0]
     length = len(string)
     count = length - k + 1
 
@@ -78,8 +79,6 @@ def winnow(hash_list=[], w = 4):
 
 
     return winnow_list
-
-    
 
 if __name__ == "__main__":
 
