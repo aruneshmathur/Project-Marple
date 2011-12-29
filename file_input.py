@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from format_hash_winnow import hash_lines
+from format_hash_winnow import hash_lines, winnow
 import utils
 
 name = "filename"
@@ -22,11 +22,9 @@ def process_files(files_list):
 
 
         hash_list = hash_lines(lines)
+        winnow_list = winnow(hash_list, 12)
 
-        for hashset in hash_list:
-            print "%d comes from lines:" % hashset[0]
-            print hashset[1]
-        #winnow_list = winnow(hash_list)
+        print len(winnow_list)
 
         #record_into_database(winnow_list)
     
