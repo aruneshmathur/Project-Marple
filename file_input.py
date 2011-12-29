@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import format_hash_winnow
+import utils
 
 name = "filename"
 content = "content"

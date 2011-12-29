@@ -2,10 +2,6 @@
 M = 5463458053
 B = 137
 
-def stripchars(s, chars):
-    return s.translate(None, chars)
-
-
 def gen_hash_list(line_def, k = 5):
     hash_list = []
 
