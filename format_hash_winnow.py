@@ -1,10 +1,10 @@
 #!/usr/bin/python
-import utils
+from utils import unique_elements
 
 M = 5463458053
 B = 137
 
-def gen_hash_list(string, line_no_list, k):
+def gen_hash_list(string, file_numbers, k):
     hash_list = []
 
     length = len(string)
@@ -24,18 +24,25 @@ def gen_hash_list(string, line_no_list, k):
     for i in range(0, k):
         t = ((t * B) + ord(string[i])) % M
 
-    hash_list.append(t)
+
+    hash_list.append([t,unique_elements(file_numbers[0:k])])
 
     for i in range(1, count):
         t = (hash_list[i-1] - (ord(string[i-1]) * j)) % M
         t = (t * B) % M
         t = (t + ord(string[i+k-1])) % M
-        hash_list.append(t)
+        hash_list.append([t,unique_elements(file_numbers[i:i+k])] )
 
     return hash_list
 
 def hash_lines(lines_with_no, k = 5):
+    file_string = ''
+    file_numbers = []
     for line_def in lines_with_no:
+        file_string = file_string + line_def[0]
+        file_numbers.extend([line_def[1] for x in range(0, len(line_def[0]))])
+
+    return gen_hash_list(file_string, file_numbers, k)
 
 
 
