@@ -1,11 +1,12 @@
 #!/usr/bin/python
+import utils
+
 M = 5463458053
 B = 137
 
-def gen_hash_list(line_def, k = 5):
+def gen_hash_list(string, line_no_list, k):
     hash_list = []
 
-    string = line_def[0]
     length = len(string)
     count = length - k + 1
 
@@ -32,6 +33,11 @@ def gen_hash_list(line_def, k = 5):
         hash_list.append(t)
 
     return hash_list
+
+def hash_lines(lines_with_no, k = 5):
+    for line_def in lines_with_no:
+
+
 
 def record(hash_list, i):
     return (hash_list[i], i)
