@@ -23,7 +23,7 @@ def process_files(files_list):
 	    lines.append([stripchars(line, chars), line_no])
 
 
-	hash_list = gen_hash_list(lines)
+    hash_list = gen_hash_list(lines)
     winnow_list = winnow(hash_list)
 
     #record_into_database(winnow_list)
