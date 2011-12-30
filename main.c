@@ -9,7 +9,7 @@
 
 int main() {
 	
-	struct file_hash* result = generate_hashes("Hello there madam!", 5);
+	struct file_hash* result = generate_hashes("AndreiArshavinisanexcellentplayerIhopehegetshisformbackandperformsagainfortheteam!", 5);
 	
 	
 	if(result) {
