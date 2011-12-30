@@ -43,6 +43,7 @@ def hash_lines(lines_with_no, k = 5):
         file_string = file_string + line_def[0]
         file_numbers.extend([line_def[1] for x in range(0, len(line_def[0]))])
 
+
     return gen_hash_list(file_string, file_numbers, k)
 
 
