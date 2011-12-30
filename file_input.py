@@ -5,7 +5,7 @@ import utils, sys
 
 name = "filename"
 content = "content"
-chars = " \'\";()#\n"
+chars = " \'\";()#\n{}"
 
 def process_files(files_list):
 
