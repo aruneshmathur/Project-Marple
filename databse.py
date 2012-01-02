@@ -2,10 +2,12 @@
 
 import MySQLdb
 
-cursor = None
+class Database:
 
-def connect_to_db(db, host, user, passwd):
-    conn = MySQLdb.connect(host, user, passwd, db)
+    def __init__(self, db, host, user, passwd):
+        self.db = db
+        self.host = host
+        self.user = user
+        self.passwd = passwd
+        self.cursor = MySQLdb.connect(host, user, passwd, db)
 
-
-create_table()
