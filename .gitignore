@@ -2,3 +2,4 @@
 *.pyc
 *~
 a.txt
+DB_settings.py
