@@ -8,8 +8,8 @@ from DB_settings import *
 warnings.filterwarnings("ignore", "Unknown table.*")
 
 file_path_key = "FILE_PATH"
-file_name_key = "FILE"
-hash_key = "HASH_KEY"
+hash_key = "HASH"
+lines_key = "LINE_NO"
 
 class Database:
 
@@ -44,6 +44,16 @@ class Database:
                             "FOREIGN KEY (" + file_path_key + ") REFERENCES " +
                             self.table1 + "(" + file_path_key + ") ON UPDATE CASCADE ON DELETE CASCADE) ENGINE=INNODB;" );
 
+
+    def insert_file_hash(name, winnow_list):
+        self.cursor.execute("INSERT INTO " + self.table1 + " VALUES(" + name +
+                            ");")
+
+        for w in winnow_list:
+            for line_no in w[1]:
+                self.cursor.execute("INSERT INTO " + self.table2 + " VALUES(" +
+                                    name + ", " + w[0] + ", " +
+                                    line_no)
 
 if __name__ == "__main__":
 
