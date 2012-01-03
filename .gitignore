@@ -1,5 +1,5 @@
 *.o
 *.pyc
 *~
-a.txt
+*.txt
 DB_settings.py
