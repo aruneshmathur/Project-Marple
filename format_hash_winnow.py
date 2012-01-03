@@ -93,7 +93,3 @@ def winnow(hash_list, w = 4):
 
     return winnow_list
 
-if __name__ == "__main__":
-
-    for i in winnow(gen_hash_list("Hello there madam!", 5), 4):
-        print i
