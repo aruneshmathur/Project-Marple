@@ -2,7 +2,7 @@
 from utils import unique_elements
 
 M = 5463458053
-B = 137
+B = 37
 
 def gen_hash_list(string, file_numbers, k):
     hash_list = []
