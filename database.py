@@ -11,19 +11,19 @@ file_path_key = "FILE_PATH"
 hash_key = "HASH"
 lines_key = "LINE_NO"
 
-class Database:
+class WinnowDB:
 
     def __init__(self):
         self.db = "marple"
         self.host = "localhost"
         self.user = "root"
         self.passwd = DATABASE_PASSWORD
-        self.cursor = MySQLdb.connect("localhost", "root", self.passwd,
-                                      self.db).cursor()
+        self.conn = MySQLdb.connect("localhost", "root", self.passwd,
+                                      self.db)
+        self.cursor = self.conn.cursor()
 
         self.table1 = "FILE_NAMES"
         self.table2 = "WINNOWED_HASHES"
-
 
     def clear(self):
 
@@ -45,18 +45,20 @@ class Database:
                             self.table1 + "(" + file_path_key + ") ON UPDATE CASCADE ON DELETE CASCADE) ENGINE=INNODB;" );
 
 
-    def insert_file_hash(name, winnow_list):
-        self.cursor.execute("INSERT INTO " + self.table1 + " VALUES(" + name +
-                            ");")
+    def insert_file_hash(self, name, winnow_list):
+        self.cursor.execute("INSERT INTO " + self.table1 + " VALUES('" + name +
+                            "');")
 
         for w in winnow_list:
             for line_no in w[1]:
-                self.cursor.execute("INSERT INTO " + self.table2 + " VALUES(" +
-                                    name + ", " + w[0] + ", " +
-                                    line_no)
+                self.cursor.execute("INSERT INTO " + self.table2 + " VALUES('" +
+                                    name + "', " + str(w[0]) + ", " +
+                                    str(line_no) +");")
 
-if __name__ == "__main__":
+                self.conn.commit()
 
-    db = Database()
-    db.clear()
-    db.setup()
+    def close(self):
+        self.cursor.close()
+
+
+
