@@ -33,8 +33,10 @@ def process_files(files_list):
             #sys.stdout.write(str(win[0]) + " in lines " + str(win[1]) + "\n")
 
         db.insert_file_hash(f, winnow_list)
+
+
         
     db.close()
 
 if __name__ == '__main__':
-    process_files(['large.txt']);
+    process_files(['a.txt']);
