@@ -25,12 +25,12 @@ class WinnowDB:
         self.table1 = "FILE_NAMES"
         self.table2 = "WINNOWED_HASHES"
 
+
     def clear(self):
 
         self.cursor.execute("DROP TABLE IF EXISTS " + self.table2)
         self.cursor.execute("DROP TABLE IF EXISTS " + self.table1)
 
-        return
 
     def setup(self):
         self.cursor.execute("CREATE TABLE " + self.table1 + 
@@ -56,6 +56,19 @@ class WinnowDB:
                                     str(line_no) +");")
 
                 self.conn.commit()
+
+    def get_file_details(hash_value):
+
+        result_list = []
+        self.cursor.execute("SELECT " + file_path_key + ", " + lines_key +
+                            "FROM " + self.table2 + " WHERE " + hash_key + " = "
+                            + hash_value + ";")
+
+        #while((row = self.cursor.fetchone()) is not None):
+            #result_list.append([row[0], row[1]])
+
+        for row in self.cursor:
+            result.append(row[0], row[1])
 
     def close(self):
         self.cursor.close()
