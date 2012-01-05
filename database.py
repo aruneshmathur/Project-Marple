@@ -64,11 +64,10 @@ class WinnowDB:
                             "FROM " + self.table2 + " WHERE " + hash_key + " = "
                             + hash_value + ";")
 
-        #while((row = self.cursor.fetchone()) is not None):
-            #result_list.append([row[0], row[1]])
-
         for row in self.cursor:
-            result.append(row[0], row[1])
+            result_list.append(row[0], row[1])
+
+        return result_list
 
     def close(self):
         self.cursor.close()
