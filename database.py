@@ -57,17 +57,17 @@ class WinnowDB:
 
                 self.conn.commit()
 
-    def get_file_details(hash_value):
+    def get_files(hash_value):
 
-        result_list = []
+        result_set = []
         self.cursor.execute("SELECT " + file_path_key + ", " + lines_key +
                             "FROM " + self.table2 + " WHERE " + hash_key + " = "
                             + hash_value + ";")
 
         for row in self.cursor:
-            result_list.append(row[0], row[1])
+            result_set.append(row[0], row[1])
 
-        return result_list
+        return result_set
 
     def close(self):
         self.cursor.close()
