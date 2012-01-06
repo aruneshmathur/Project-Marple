@@ -7,7 +7,7 @@ import database
 name = "filename"
 content = "content"
 chars = " \'\";()#\n{}"
-threshold = 10
+threshold = 5
 
 def process_files(files_list):
 
@@ -32,6 +32,8 @@ def process_files(files_list):
 
         db.insert_file_hash(f, winnow_list)
 
+
+    final_similarity_list = {}
     
     for f in file_list:
         hash_list = get_hashes(f)
@@ -45,6 +47,9 @@ def process_files(files_list):
                 similar_to_this_file.get(sim[0],0) + 1
 
 
+        final_similarity_list[f] = [similar_to_this_file[x] for x in
+                                    similar_to_this_file.keys() if
+                                    similar_to_this_file[x] > threshold]     
 
         
     db.close()
