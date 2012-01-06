@@ -7,6 +7,7 @@ import database
 name = "filename"
 content = "content"
 chars = " \'\";()#\n{}"
+threshold = 10
 
 def process_files(files_list):
 
@@ -29,10 +30,20 @@ def process_files(files_list):
         hash_list = hash_lines(lines)
         winnow_list = winnow(hash_list, 12)
 
-        #for win in winnow_list:
-            #sys.stdout.write(str(win[0]) + " in lines " + str(win[1]) + "\n")
-
         db.insert_file_hash(f, winnow_list)
+
+    
+    for f in file_list:
+        hash_list = get_hashes(f)
+        similar_to_this_file = {}
+
+        for h in hash_list:
+            similar_file_list = get_filenames(h[0])
+
+            for sim in similar_file_list:
+                similar_to_this_file[sim[0]] =
+                similar_to_this_file.get(sim[0],0) + 1
+
 
 
         
