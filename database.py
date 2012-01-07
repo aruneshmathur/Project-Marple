@@ -58,28 +58,28 @@ class WinnowDB:
                 self.conn.commit()
 
 
-    def get_filenames(hash_value):
+    def get_filenames(self, hash_value):
 
         result_set = []
         self.cursor.execute("SELECT " + file_path_key + ", " + lines_key +
-                            "FROM " + self.table2 + " WHERE " + hash_key + " = "
-                            + hash_value + ";")
+                            " FROM " + self.table2 + " WHERE " + hash_key + " = "
+                            + str(hash_value) + ";")
 
         for row in self.cursor:
-            result_set.append(row[0], row[1])
+            result_set.append([row[0], row[1]])
 
         return result_set
 
 
-    def get_hashes(file_name):
+    def get_hashes(self, file_name):
 
         result_set = []
-        self.cursor.execute("SELECT " + hash_key + ", " + lines_key + "FROM " +
-                            self.table2 + " WHERE " + file_path_key + " = " +
-                            hash_value + ";")
 
+        self.cursor.execute("SELECT " + hash_key + ", " + lines_key +
+                            " FROM " + self.table2 + " WHERE " + file_path_key + 
+                            " = '" + file_name + "';")
         for row in self.cursor:
-            result_set(row[0], row[1])
+            result_set.append([row[0], row[1]])
 
         return result_set
 
