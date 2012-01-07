@@ -8,6 +8,8 @@ name = "filename"
 content = "content"
 chars = " \'\";()#\n{}"
 threshold = 5
+k_gram = 10
+window = 12
 
 def process_files(files_list):
 
@@ -27,32 +29,35 @@ def process_files(files_list):
             lines.append([utils.stripchars(line, chars), line_no])
 
 
-        hash_list = hash_lines(lines)
-        winnow_list = winnow(hash_list, 12)
+        hash_list = hash_lines(lines, k_gram)
+        winnow_list = winnow(hash_list, window)
 
         db.insert_file_hash(f, winnow_list)
 
 
     final_similarity_list = {}
     
-    for f in file_list:
-        hash_list = get_hashes(f)
+    for f in files_list:
+        hash_list = db.get_hashes(f)
         similar_to_this_file = {}
 
         for h in hash_list:
-            similar_file_list = get_filenames(h[0])
+            similar_file_list = db.get_filenames(h[0])
 
             for sim in similar_file_list:
-                similar_to_this_file[sim[0]] =
-                similar_to_this_file.get(sim[0],0) + 1
+                similar_to_this_file[sim[0]] = similar_to_this_file.get(sim[0],0) + 1
 
 
-        final_similarity_list[f] = [similar_to_this_file[x] for x in
-                                    similar_to_this_file.keys() if
-                                    similar_to_this_file[x] > threshold]     
+        final_similarity_list[f] = [x for x in similar_to_this_file.keys() 
+                                    if similar_to_this_file[x] > threshold]     
 
-        
+     
+    for k in final_similarity_list.keys():
+        print k, final_similarity_list[k]
+
     db.close()
+
+
 
 if __name__ == '__main__':
     process_files(['a.txt']);
