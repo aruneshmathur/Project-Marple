@@ -58,7 +58,7 @@ class WinnowDB:
                 self.conn.commit()
 
 
-    def get_filenames(self, hash_value):
+    def get_filenames(self, hash_value, except_file):
 
         result_set = []
         self.cursor.execute("SELECT " + file_path_key + ", " + lines_key +
@@ -66,7 +66,8 @@ class WinnowDB:
                             + str(hash_value) + ";")
 
         for row in self.cursor:
-            result_set.append([row[0], row[1]])
+            if row[0] != except_file:
+               result_set.append([row[0], row[1]])
 
         return result_set
 
