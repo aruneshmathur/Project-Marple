@@ -1,8 +1,6 @@
 TODO
 ====
 
-1. Python-MySQL interface build.
+1. Maximal matching between ranked files
 2. Python-Setuptools integration.
-3. Comparison module.
-4. Documentation and "git" website.
-5. Ranking module.
+3. Documentation and "git" website.
