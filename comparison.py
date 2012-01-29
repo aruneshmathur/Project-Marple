@@ -13,7 +13,7 @@ def get_matrix(*shape):
     return [get_matrix(*cdr) for i in range(car)]
 
 
-def LCSLength(text_dict1, text_dict2):
+def LCS_matrix(text_dict1, text_dict2):
     if not (text_dict1.has_key(text) and text_dict2.has_key(text)):
         return None
 
@@ -35,7 +35,21 @@ def LCSLength(text_dict1, text_dict2):
             else:
                 c[i][j] = max(c[i][j-1], c[i-1][j])
 
-    return c[m][n]
+    return c
+
+def LCS_string(matrix, str1, str2, i, j):
+    if i == 0 or j == 0:
+        return ""
+
+    elif str1[i-1] == str2[j-1]:
+        return LCS_string(matrix, str1, str2, i - 1, j - 1) + str1[i-1]
+    
+    else:
+        if matrix[i][j-1] > matrix[i-1][j]:
+            return LCS_string(matrix, str1, str2, i, j - 1)
+        else:
+            return LCS_string(matrix, str1, str2, i - 1, j)
+
 
 if __name__=='__main__':
     
@@ -44,4 +58,6 @@ if __name__=='__main__':
     a[text] = 'aruneshmathur'
     b[text] = 'animeshmathur'
 
-    print LCSLength(a, b)
+    print LCS_string(LCS_matrix(a, b), a[text], b[text], len(a[text]),
+                     len(b[text]))
+
