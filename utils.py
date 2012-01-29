@@ -13,10 +13,12 @@ def unique_elements(ele_list):
 
     return dic.keys()
 
+
 def list_files(path, dest_path):
     f = open(dest_path, 'a')
     get_file_list_path(path, f)
     f.close()
+
 
 def get_file_list_path(path, dest_file):    
     for f in os.listdir(path):
@@ -24,5 +26,4 @@ def get_file_list_path(path, dest_file):
             get_file_list_path(path + '/' + f, dest_file)
         else:
             dest_file.write(path + '/' + f + '\n')
-
 
