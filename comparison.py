@@ -3,6 +3,9 @@
 text = "TEXT"
 line_no = "LINE_NO"
 
+import sys
+sys.setrecursionlimit(2000)
+
 def get_matrix(*shape):
     if len(shape) == 0:
         return 0
@@ -55,8 +58,10 @@ if __name__=='__main__':
     
     a = {}
     b = {}
-    a[text] = 'aruneshmathur'
-    b[text] = 'animeshmathur'
+    f = open('a', 'r')
+    a[text] = f.read()
+    f = open('b', 'r')
+    b[text] = f.read()
 
     print LCS_string(LCS_matrix(a, b), a[text], b[text], len(a[text]),
                      len(b[text]))
