@@ -27,3 +27,27 @@ def get_file_list_path(path, dest_file):
         else:
             dest_file.write(path + '/' + f + '\n')
 
+
+def get_matrix(*shape):
+    if len(shape) == 0:
+        return 0
+
+    car = shape[0]
+    cdr = shape[1:]
+
+    return [get_matrix(*cdr) for i in range(car)]
+
+
+def file_contents_line_numbers(filename):
+
+    i = 1
+    line_content = ""
+    line_numbers = []
+
+    for line in open(filename, 'r'):
+        line = stripchars(line, " \n	")    
+        line_content = line_content + line
+	line_numbers.extend([i for char in line])
+        i = i + 1    
+     
+    return (line_content, line_numbers)
