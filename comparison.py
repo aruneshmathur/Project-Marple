@@ -1,27 +1,18 @@
 #!/usr/bin/python
 
+import string, utils
+
 text = "TEXT"
 line_no = "LINE_NO"
-
-import sys
-sys.setrecursionlimit(2000)
-
-def get_matrix(*shape):
-    if len(shape) == 0:
-        return 0
-
-    car = shape[0]
-    cdr = shape[1:]
-
-    return [get_matrix(*cdr) for i in range(car)]
+threshold = 20
 
 
-def LCS_matrix(text_dict1, text_dict2):
+def longest_common_substring(text_dict1, text_dict2):
     if not (text_dict1.has_key(text) and text_dict2.has_key(text)):
         return None
 
-    #if not (text_dict1.has_key(line_no) and text_dict2.has_key(line_no)):
-        #return None
+    if not (text_dict1.has_key(line_no) and text_dict2.has_key(line_no)):
+        return None
 
     str1 = text_dict1[text]
     str2 = text_dict2[text]
@@ -29,40 +20,40 @@ def LCS_matrix(text_dict1, text_dict2):
     m = len(str1)
     n = len(str2)
 
-    c = get_matrix(m + 1, n + 1)
+    result = []
+    x_longest, longest = 0, 0
 
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if str1[i-1] == str2[j-1]:
+    c = utils.get_matrix(m, n)
+
+    for i in range(0, m):
+        for j in range(0, n):
+            if str1[i] == str2[j]:
                 c[i][j] = c[i-1][j-1] + 1
+
+                if c[i][j] > longest:
+                    longest = c[i][j]
+                    x_longest = i
+
             else:
-                c[i][j] = max(c[i][j-1], c[i-1][j])
+                c[i][j] = 0
 
-    return c
-
-def LCS_string(matrix, str1, str2, i, j):
-    if i == 0 or j == 0:
-        return ""
-
-    elif str1[i-1] == str2[j-1]:
-        return LCS_string(matrix, str1, str2, i - 1, j - 1) + str1[i-1]
-    
-    else:
-        if matrix[i][j-1] > matrix[i-1][j]:
-            return LCS_string(matrix, str1, str2, i, j - 1)
-        else:
-            return LCS_string(matrix, str1, str2, i - 1, j)
+    return str1[x_longest - longest + 1: x_longest + 1]
 
 
 if __name__=='__main__':
     
     a = {}
     b = {}
-    f = open('a', 'r')
-    a[text] = f.read()
-    f = open('b', 'r')
-    b[text] = f.read()
 
-    print LCS_string(LCS_matrix(a, b), a[text], b[text], len(a[text]),
-                     len(b[text]))
+    (a[text], a[line_no]) = utils.file_contents_line_numbers('a.txt')
+    (b[text], b[line_no]) = utils.file_contents_line_numbers('b.txt')
+
+    res = longest_common_substring(a, b)
+
+    while len(res) > threshold:
+        print res
+
+        a[text] = string.replace(a[text], res, "")
+        b[text] = string.replace(b[text], res, "")
+        res = longest_common_substring(a, b)
 
