@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import string, utils
+import string, utils, html_dumper
 
 text = "TEXT"
 line_no = "LINE_NO"
@@ -9,7 +9,7 @@ lines2 = "LINES2"
 file_names = "FILENAMES"
 match_lines = "MATCH_LINES"
 
-threshold = 10
+threshold = 30
 
 
 def LCS(text_dict1, text_dict2, min_length):
@@ -88,7 +88,7 @@ def LCS_string(c, text_dict1, text_dict2, min_length):
     res_line2.append(cur_line2)
 
     return {
-        lines1 : [sorted(tils.unique_elements(x)) for x in res_line1], 
+        lines1 : [sorted(utils.unique_elements(x)) for x in res_line1], 
         lines2 : [sorted(utils.unique_elements(x)) for x in res_line2]
     }
     #return res + cur_str
@@ -110,5 +110,5 @@ if __name__=='__main__':
         match_lines : res
     }
 
-    dump_to_HTML(result)
+    html_dumper.dump_to_HTML(result, "")
 
