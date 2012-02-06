@@ -51,8 +51,10 @@ def LCS_string(c, text_dict1, text_dict2, min_length):
     str_lines2 = text_dict2[line_no]
 
     res = cur_str = ""
-    res_line1 = cur_line1 = []
-    res_line2 = cur_line2 = []
+    res_line1 = [] 
+    cur_line1 = []
+    res_line2 = []
+    cur_line2 = []
 
     while i != 0 and j != 0:
         if(str1[i-1] == str2[j-1]):
@@ -66,11 +68,12 @@ def LCS_string(c, text_dict1, text_dict2, min_length):
 
             if len(cur_str) >= threshold:
                 res = res + cur_str
-                res_line1.extend(cur_line1)
-                res_line2.extend(cur_line2)
+                res_line1.append(cur_line1)
+                res_line2.append(cur_line2)
             
             cur_str = ""
-            cur_line1 = cur_line2 = []
+            cur_line1 = []
+            cur_line2 = []
 
             if c[i][j-1] > c[i-1][j]:
                 j = j-1
@@ -79,12 +82,12 @@ def LCS_string(c, text_dict1, text_dict2, min_length):
                 i = i-1
 
 
-    res_line1.extend(cur_line1)
-    res_line2.extend(cur_line2)
+    res_line1.append(cur_line1)
+    res_line2.append(cur_line2)
 
     return {
-        lines1:utils.unique_elements(res_line1), 
-        lines2:utils.unique_elements(res_line2)
+        lines1:[sorted(tils.unique_elements(x)) for x in res_line1], 
+        lines2:[sorted(utils.unique_elements(x)) for x in res_line2]
     }
     #return res + cur_str
 
@@ -100,8 +103,7 @@ if __name__=='__main__':
     
     res = LCS(a, b, threshold)
 
-    print res[lines1]
+    print res
 
-    print res[lines2]
     #print res[::-1]
 
