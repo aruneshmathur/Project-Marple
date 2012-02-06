@@ -6,6 +6,8 @@ text = "TEXT"
 line_no = "LINE_NO"
 lines1 = "LINES1"
 lines2 = "LINES2"
+file_names = "FILENAMES"
+match_lines = "MATCH_LINES"
 
 threshold = 10
 
@@ -86,8 +88,8 @@ def LCS_string(c, text_dict1, text_dict2, min_length):
     res_line2.append(cur_line2)
 
     return {
-        lines1:[sorted(tils.unique_elements(x)) for x in res_line1], 
-        lines2:[sorted(utils.unique_elements(x)) for x in res_line2]
+        lines1 : [sorted(tils.unique_elements(x)) for x in res_line1], 
+        lines2 : [sorted(utils.unique_elements(x)) for x in res_line2]
     }
     #return res + cur_str
 
@@ -103,7 +105,10 @@ if __name__=='__main__':
     
     res = LCS(a, b, threshold)
 
-    print res
+    result = {
+        file_names : ['a.txt', 'b.txt'],
+        match_lines : res
+    }
 
-    #print res[::-1]
+    dump_to_HTML(result)
 
