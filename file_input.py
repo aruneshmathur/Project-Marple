@@ -51,12 +51,39 @@ def process_files(files_list):
                                     if similar_to_file[x] > threshold]     
 
      
-    for k in final_similarity_dict.keys():
-        print k, final_similarity_dict[k]
+    #for k in final_similarity_dict.keys():
+        #print k, final_similarity_dict[k]
 
     db.close()
+
+    return final_similarity_dict
 
 
 
 if __name__ == '__main__':
-    process_files(['../a.c', '../b.c'])
+
+    file_list = ['test/a.txt', 'test/b.txt']
+    output_dict = "/home/aruneshmathur/major-project/Code/output/"
+
+    sim_dict = process_files(['test/a.txt', 'test/b.txt'])
+
+    for k in sim_dict.keys():
+        
+        a = {}
+        (a[text], a[line_no]) = utils.file_contents_line_numbers(k)
+
+        for k in sim_dict[k]:
+            b = {}
+            (b[text], b[line_no]) = utils.file_contents_line_numbers('b.txt')
+
+            res = LCS(a, b, threshold)
+
+            result = {
+                file_names : ['a.txt', 'b.txt'],
+                match_lines : res
+            }
+
+            html_dumper.dump_to_HTML(result, "/home/aruneshmathur/major-project/Code/Project-Marple/")
+
+
+    

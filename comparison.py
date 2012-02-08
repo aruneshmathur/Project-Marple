@@ -93,22 +93,3 @@ def LCS_string(c, text_dict1, text_dict2, min_length):
     }
     #return res + cur_str
 
-
-if __name__=='__main__':
-    
-    a = {}
-    b = {}
-
-    (a[text], a[line_no]) = utils.file_contents_line_numbers('a.txt')
-    (b[text], b[line_no]) = utils.file_contents_line_numbers('b.txt')
-
-    
-    res = LCS(a, b, threshold)
-
-    result = {
-        file_names : ['a.txt', 'b.txt'],
-        match_lines : res
-    }
-
-    html_dumper.dump_to_HTML(result, "")
-
