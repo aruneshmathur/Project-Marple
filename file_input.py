@@ -59,4 +59,4 @@ def process_files(files_list):
 
 
 if __name__ == '__main__':
-    process_files(['../a.c', '../b.c']);
+    process_files(['../a.c', '../b.c'])
