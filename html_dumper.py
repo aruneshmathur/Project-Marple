@@ -1,11 +1,23 @@
 #!/usr/bin/python
 
-import comparison
+import comparison, os
 
 colors = ['red', 'blue', 'green', 'cyan', 'fuchsia', 'cyan']
 c_len = 6
 
-def dump_to_HTML(result, output):
+file1 = "match1.html"
+file2 = "match2.html"
+index = "index.html"
+
+
+def dump_to_HTML(result, output_dir):
+
+    if not os.path.isdir(output_dir):
+        return False
+
+    if not output_dir[::-1].startswith('/'):
+        output_dir = output_dir + "/"
+
 
     files = result[comparison.file_names]       
     lines = result[comparison.match_lines]
@@ -16,10 +28,23 @@ def dump_to_HTML(result, output):
     path_f1 = files[0]
     path_f2 = files[1]
 
-    form_HTML(path_f1, lines_one)
+    res = form_HTML(path_f1, lines_one)
+    write(res, output_dir, file1)
 
-    form_HTML(path_f2, lines_two)
+    res = form_HTML(path_f2, lines_two)
+    write(res, output_dir, file2)
 
+    res = "<html><frameset cols=\"50%,50%\"><frame src=\"" + file1 + "\"><frame src=\"" + file2 + "\"></frameset></html>"
+    write(res, output_dir, index)
+
+    return True
+
+
+def write(res, output_dir, filename):
+    path = output_dir + filename
+    f = open(path, 'w')
+    f.write(res)
+    f.close()
 
 def form_HTML(path, lines):
 
@@ -50,5 +75,6 @@ def form_HTML(path, lines):
 
     html_str = html_str + "</pre> </p> </body> </html>"
 
-    print html_str
+    return html_str
+
 
