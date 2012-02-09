@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 from format_hash_winnow import hash_lines, winnow
-import utils, sys
-import database
+import utils, sys, os, comparison, html_dumper, database
+
 
 name = "filename"
 content = "content"
@@ -63,27 +63,42 @@ def process_files(files_list):
 if __name__ == '__main__':
 
     file_list = ['test/a.txt', 'test/b.txt']
-    output_dict = "/home/aruneshmathur/major-project/Code/output/"
+    output_dict = os.path.abspath("/home/aruneshmathur/major-project/Projects/output/")
 
     sim_dict = process_files(['test/a.txt', 'test/b.txt'])
 
     for k in sim_dict.keys():
-        
         a = {}
-        (a[text], a[line_no]) = utils.file_contents_line_numbers(k)
+        (a[comparison.text], a[comparison.line_no]) = utils.file_contents_line_numbers(k)
 
-        for k in sim_dict[k]:
+        for f in sim_dict[k]:
+            start = ""
+            end = ""
+            if k < f:
+                start = k
+                end = f
+            else:
+                start = f
+                end = k
+
+            path = output_dict + "/" + str(abs(hash(start + end)))
+            if os.path.exists(path):
+                continue
+            else:
+                os.makedirs(path)
+
+
             b = {}
-            (b[text], b[line_no]) = utils.file_contents_line_numbers('b.txt')
+            (b[comparison.text], b[comparison.line_no]) = utils.file_contents_line_numbers(f)
 
-            res = LCS(a, b, threshold)
+            res = comparison.LCS(a, b, threshold)
 
             result = {
-                file_names : ['a.txt', 'b.txt'],
-                match_lines : res
+                comparison.file_names : [k, f],
+                comparison.match_lines : res
             }
 
-            html_dumper.dump_to_HTML(result, "/home/aruneshmathur/major-project/Code/Project-Marple/")
+            html_dumper.dump_to_HTML(result, path)
 
 
-    
+        
