@@ -15,8 +15,7 @@ def dump_to_HTML(result, output_dir):
     if not os.path.isdir(output_dir):
         return False
 
-    if not output_dir[::-1].startswith('/'):
-        output_dir = output_dir + "/"
+    output_dir = output_dir + "/"
 
 
     files = result[comparison.file_names]       
@@ -41,7 +40,7 @@ def dump_to_HTML(result, output_dir):
 
 
 def write(res, output_dir, filename):
-    path = output_dir + filename
+    path = output_dir + "/" + filename
     f = open(path, 'w')
     f.write(res)
     f.close()
