@@ -10,6 +10,7 @@ warnings.filterwarnings("ignore", "Unknown table.*")
 file_path_key = "FILE_PATH"
 hash_key = "HASH"
 lines_key = "LINE_NO"
+ignore_key = "IGNOREH"
 
 class WinnowDB:
 
@@ -24,32 +25,49 @@ class WinnowDB:
 
         self.table1 = "FILE_NAMES"
         self.table2 = "WINNOWED_HASHES"
-
+        self.table3 = "IGNORE_HASHES"
 
     def clear(self):
 
         self.cursor.execute("DROP TABLE IF EXISTS " + self.table2)
         self.cursor.execute("DROP TABLE IF EXISTS " + self.table1)
+        self.cursor.execute("DROP TABLE IF EXISTS " + self.table3)
 
 
     def setup(self):
         self.cursor.execute("CREATE TABLE " + self.table1 + 
-                            "(" + file_path_key + " VARCHAR(100), PRIMARY KEY("+
+                            "(" + file_path_key + " VARCHAR(200), PRIMARY KEY("+
                             file_path_key+ ")) ENGINE=INNODB;")
 
         self.cursor.execute("CREATE TABLE " + self.table2 + "(" + 
-                            file_path_key + " VARCHAR(100) NOT NULL, " +
+                            file_path_key + " VARCHAR(200) NOT NULL, " +
                             hash_key + " BIGINT(20) NOT NULL, " +
                             lines_key + " INTEGER NOT NULL, " +
                             "FOREIGN KEY (" + file_path_key + ") REFERENCES " +
-                            self.table1 + "(" + file_path_key + ") ON UPDATE CASCADE ON DELETE CASCADE) ENGINE=INNODB;" );
+                            self.table1 + "(" + file_path_key + ") ON UPDATE CASCADE ON DELETE CASCADE) ENGINE=INNODB;" )
+
+
+        self.cursor.execute("CREATE TABLE " + self.table3 + 
+                            "(" + ignore_key + " BIGINT(20), PRIMARY KEY("+
+                            ignore_key+ ")) ENGINE=INNODB;")
+
+
+    def insert_ignore_list(self, winnow_list):
+        for w in winnow_list:
+            self.cursor.execute("INSERT IGNORE INTO " + self.table3 + " VALUES('" +
+                                str(w) + "');")
+
+            self.conn.commit()
 
 
     def insert_file_hash(self, name, winnow_list):
         self.cursor.execute("INSERT INTO " + self.table1 + " VALUES('" + name +
                             "');")
 
+        self.conn.commit()
+
         for w in winnow_list:
+
             for line_no in w[1]:
                 self.cursor.execute("INSERT INTO " + self.table2 + " VALUES('" +
                                     name + "', " + str(w[0]) + ", " +
@@ -78,7 +96,7 @@ class WinnowDB:
 
         self.cursor.execute("SELECT " + hash_key + ", " + lines_key +
                             " FROM " + self.table2 + " WHERE " + file_path_key + 
-                            " = '" + file_name + "';")
+                            " = '" + file_name + "' AND " +  hash_key + " NOT IN (SELECT * FROM " + self.table3 + ");")
         for row in self.cursor:
             result_set.append([row[0], row[1]])
 
