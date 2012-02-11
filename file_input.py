@@ -6,8 +6,8 @@ import utils, sys, os, comparison, html_dumper, database
 
 name = "filename"
 content = "content"
-chars = " \'\";()#\n{}"
-threshold = 5
+chars = " \'\";()#\n{}-*|"
+threshold = 15
 k_gram = 10
 window = 12
 
@@ -18,6 +18,9 @@ def process_files(files_list):
     db.setup()
 
     for f in files_list:
+
+        print f
+
         holder = open(f, 'r')
 
         line_no = 0
@@ -28,16 +31,23 @@ def process_files(files_list):
             line_no = line_no + 1
             lines.append([utils.stripchars(line, chars), line_no])
 
-
+        
         hash_list = hash_lines(lines, k_gram)
+
+        if hash_list is None:
+            print f + " is empty?"
+            continue
+
         winnow_list = winnow(hash_list, window)
 
         db.insert_file_hash(f, winnow_list)
 
 
+
     final_similarity_dict = {}
     
-    for f in files_list:
+    for f in files_list:\
+
         hash_list = db.get_hashes(f)
         similar_to_file = {}
 
@@ -54,7 +64,7 @@ def process_files(files_list):
     #for k in final_similarity_dict.keys():
         #print k, final_similarity_dict[k]
 
-    db.close()
+    #db.close()
 
     return final_similarity_dict
 
@@ -62,10 +72,14 @@ def process_files(files_list):
 
 if __name__ == '__main__':
 
-    file_list = ['test/a.txt', 'test/b.txt']
+
+    file_list = [x.rstrip('\n') for x in open("list.txt", "r")]
     output_dict = os.path.abspath("/home/aruneshmathur/major-project/Projects/output/")
 
-    sim_dict = process_files(['test/a.txt', 'test/b.txt'])
+    sim_dict = process_files(file_list)
+
+    for k in sim_dict.keys():
+        print k, sim_dict[k]
 
     for k in sim_dict.keys():
         a = {}
@@ -92,13 +106,9 @@ if __name__ == '__main__':
             (b[comparison.text], b[comparison.line_no]) = utils.file_contents_line_numbers(f)
 
             res = comparison.LCS(a, b, threshold)
-
             result = {
                 comparison.file_names : [k, f],
                 comparison.match_lines : res
             }
-
             html_dumper.dump_to_HTML(result, path)
 
-
-        
