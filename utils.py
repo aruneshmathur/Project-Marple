@@ -2,6 +2,8 @@
 
 import os
 
+maxsize = 2048
+
 def stripchars(s, chars):
     return s.translate(None, chars)
 
@@ -15,8 +17,8 @@ def unique_elements(ele_list):
 
 
 def list_files(path, dest_path):
-    f = open(dest_path, 'a')
-    get_file_list_path(path, f)
+    f = open(dest_path, 'w')
+    get_file_list_path(os.path.abspath(path), f)
     f.close()
 
 
@@ -27,7 +29,8 @@ def get_file_list_path(path, dest_file):
         if os.path.isdir(path + '/' + f) == True:
             get_file_list_path(path + '/' + f, dest_file)
         else:
-            dest_file.write(path + '/' + f + '\n')
+            if os.path.getsize(path + '/' + f) < maxsize:
+                dest_file.write(path + '/' + f + '\n')
 
 
 def get_matrix(*shape):
