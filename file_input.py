@@ -1,21 +1,37 @@
 #!/usr/bin/python
 
-from format_hash_winnow import hash_lines, winnow
+from format_hash_winnow import hash_lines, winnow, hash_ignore_lines, winnow_ignore
 import utils, sys, os, comparison, html_dumper, database
 
 
 name = "filename"
 content = "content"
-chars = " \'\";()#\n{}-*|"
+chars = " \'\";()#\n{}-*|="
 threshold = 15
 k_gram = 10
 window = 12
 
-def process_files(files_list):
+def process_files(files_list, ignore_file_list):
 
     db = database.WinnowDB()
     db.clear()
     db.setup()
+
+    for f in ignore_file_list:
+
+        lines = ""
+        for line in open(f, 'r'):
+            lines = lines + utils.stripchars(line, chars)
+
+        hash_list = hash_ignore_lines(lines, k_gram)
+
+        if hash_list is None:
+            continue
+
+        winnow_list = winnow_ignore(hash_list, window)
+
+        db.insert_ignore_list(winnow_list)
+
 
     for f in files_list:
 
@@ -61,9 +77,6 @@ def process_files(files_list):
                                     if similar_to_file[x] > threshold]     
 
      
-    #for k in final_similarity_dict.keys():
-        #print k, final_similarity_dict[k]
-
     #db.close()
 
     return final_similarity_dict
@@ -74,12 +87,17 @@ if __name__ == '__main__':
 
 
     file_list = [x.rstrip('\n') for x in open("list.txt", "r")]
+    ignore_file_list = [x.rstrip('\n') for x in open("ignore.txt", "r")]
+
+
     output_dict = os.path.abspath("/home/aruneshmathur/major-project/Projects/output/")
 
-    sim_dict = process_files(file_list)
+    sim_dict = process_files(file_list, ignore_file_list)
+
 
     for k in sim_dict.keys():
         print k, sim_dict[k]
+
 
     for k in sim_dict.keys():
         a = {}
