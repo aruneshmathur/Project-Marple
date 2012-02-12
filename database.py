@@ -36,7 +36,7 @@ class WinnowDB:
 
     def setup(self):
         self.cursor.execute("CREATE TABLE " + self.table1 + 
-                            "(" + file_path_key + " VARCHAR(200), PRIMARY KEY("+
+                            "(" + file_path_key + " VARCHAR(500), PRIMARY KEY("+
                             file_path_key+ ")) ENGINE=INNODB;")
 
         self.cursor.execute("CREATE TABLE " + self.table2 + "(" + 
@@ -79,13 +79,13 @@ class WinnowDB:
     def get_filenames(self, hash_value, except_file):
 
         result_set = []
-        self.cursor.execute("SELECT " + file_path_key + ", " + lines_key +
+        self.cursor.execute("SELECT DISTINCT " + file_path_key +
                             " FROM " + self.table2 + " WHERE " + hash_key + " = "
                             + str(hash_value) + ";")
 
         for row in self.cursor:
             if row[0] != except_file:
-               result_set.append([row[0], row[1]])
+               result_set.append(row[0])
 
         return result_set
 
