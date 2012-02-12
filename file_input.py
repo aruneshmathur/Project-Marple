@@ -6,10 +6,10 @@ import utils, sys, os, comparison, html_dumper, database
 
 name = "filename"
 content = "content"
-chars = " \'\";()#\n{}-*|="
-threshold = 15
-k_gram = 10
-window = 12
+chars = " \'\";()#\n{}-*|=/"
+threshold = 40
+k_gram = 50
+window = 100
 
 def process_files(files_list, ignore_file_list):
 
@@ -62,7 +62,7 @@ def process_files(files_list, ignore_file_list):
 
     final_similarity_dict = {}
     
-    for f in files_list:\
+    for f in files_list:
 
         hash_list = db.get_hashes(f)
         similar_to_file = {}
@@ -71,7 +71,7 @@ def process_files(files_list, ignore_file_list):
             similar_file_list = db.get_filenames(h[0], f)
 
             for sim in similar_file_list:
-                similar_to_file[sim[0]] = similar_to_file.get(sim[0],0) + 1
+                similar_to_file[sim] = similar_to_file.get(sim,0) + 1
                 
         final_similarity_dict[f] = [x for x in similar_to_file.keys() 
                                     if similar_to_file[x] > threshold]     
@@ -128,5 +128,6 @@ if __name__ == '__main__':
                 comparison.file_names : [k, f],
                 comparison.match_lines : res
             }
+
             html_dumper.dump_to_HTML(result, path)
 
