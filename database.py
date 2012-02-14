@@ -40,7 +40,7 @@ class WinnowDB:
                             file_path_key+ ")) ENGINE=INNODB;")
 
         self.cursor.execute("CREATE TABLE " + self.table2 + "(" + 
-                            file_path_key + " VARCHAR(200) NOT NULL, " +
+                            file_path_key + " VARCHAR(500) NOT NULL, " +
                             hash_key + " BIGINT(20) NOT NULL, " +
                             lines_key + " INTEGER NOT NULL, " +
                             "FOREIGN KEY (" + file_path_key + ") REFERENCES " +
