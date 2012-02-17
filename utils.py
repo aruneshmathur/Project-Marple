@@ -56,3 +56,6 @@ def file_contents_line_numbers(filename):
         i = i + 1    
      
     return (line_content, line_numbers)
+
+def log(string):
+    print string

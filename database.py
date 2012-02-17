@@ -9,7 +9,6 @@ warnings.filterwarnings("ignore", "Unknown table.*")
 
 file_path_key = "FILE_PATH"
 hash_key = "HASH"
-lines_key = "LINE_NO"
 ignore_key = "IGNOREH"
 
 class WinnowDB:
@@ -42,7 +41,6 @@ class WinnowDB:
         self.cursor.execute("CREATE TABLE " + self.table2 + "(" + 
                             file_path_key + " VARCHAR(500) NOT NULL, " +
                             hash_key + " BIGINT(20) NOT NULL, " +
-                            lines_key + " INTEGER NOT NULL, " +
                             "FOREIGN KEY (" + file_path_key + ") REFERENCES " +
                             self.table1 + "(" + file_path_key + ") ON UPDATE CASCADE ON DELETE CASCADE) ENGINE=INNODB;" )
 
@@ -68,12 +66,10 @@ class WinnowDB:
 
         for w in winnow_list:
 
-            for line_no in w[1]:
-                self.cursor.execute("INSERT INTO " + self.table2 + " VALUES('" +
-                                    name + "', " + str(w[0]) + ", " +
-                                    str(line_no) +");")
+            self.cursor.execute("INSERT INTO " + self.table2 + " VALUES('" +
+                               name + "', " + str(w) + ");")
 
-                self.conn.commit()
+            self.conn.commit()
 
 
     def get_filenames(self, hash_value, except_file):
@@ -94,11 +90,10 @@ class WinnowDB:
 
         result_set = []
 
-        self.cursor.execute("SELECT " + hash_key + ", " + lines_key +
-                            " FROM " + self.table2 + " WHERE " + file_path_key + 
+        self.cursor.execute("SELECT " + hash_key + " FROM " + self.table2 + " WHERE " + file_path_key + 
                             " = '" + file_name + "' AND " +  hash_key + " NOT IN (SELECT * FROM " + self.table3 + ");")
         for row in self.cursor:
-            result_set.append([row[0], row[1]])
+            result_set.append(row[0])
 
         return result_set
 
