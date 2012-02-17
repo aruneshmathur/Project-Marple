@@ -59,11 +59,12 @@ def process_files(files_list, ignore_file_list):
         db.insert_file_hash(f, winnow_list)
 
 
-
+    print "done insertinf file hashes"
     final_similarity_dict = {}
     
     for f in files_list:
 
+        print f
         hash_list = db.get_hashes(f)
         similar_to_file = {}
 
@@ -75,7 +76,7 @@ def process_files(files_list, ignore_file_list):
                 
         final_similarity_dict[f] = [x for x in similar_to_file.keys() 
                                     if similar_to_file[x] > threshold]     
-
+        print "done"
      
     #db.close()
 
