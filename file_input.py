@@ -17,9 +17,14 @@ def process_files(files_list, ignore_file_list):
     db.clear()
     db.setup()
 
-    utils.log("Hashing Ignore files.")
+    log = 0
+    size = len(ignore_file_list)
 
     for f in ignore_file_list:
+        
+        sys.stdout.write("\rHashing Ignore files.......%d%%" % ((100 * log) / size))
+        sys.stdout.flush()
+        log = log + 1
 
         lines = ""
         for line in open(f, 'r'):
@@ -34,14 +39,17 @@ def process_files(files_list, ignore_file_list):
 
         db.insert_ignore_list(winnow_list)
 
-    utils.log("Done hashing Ignore files.")
-
-
-    utils.log("Hashing files to be compared.")
+    sys.stdout.write("\rHashing Ignore files.......Done\n")
+    sys.stdout.flush()
+    
+    log = 0
+    size = len(files_list)
 
     for f in files_list:
 
-        utils.log("Now Hashing " + f)
+        sys.stdout.write("\rHashing files.......%d%%" % ((100 * log) / size))
+        sys.stdout.flush()
+        log = log + 1
 
         lines = ""
         for line in open(f, 'r'):
@@ -50,7 +58,7 @@ def process_files(files_list, ignore_file_list):
         hash_list = hash_kgrams(lines, k_gram)
 
         if hash_list is None:
-            utils.log("Is " + f + " empty?")
+            #utils.log("Is " + f + " empty?")
             continue
 
         winnow_list = winnow(hash_list, w_window)
@@ -58,7 +66,9 @@ def process_files(files_list, ignore_file_list):
         db.insert_file_hash(f, winnow_list)
 
 
-    utils.log("Done hashing files.")
+    #utils.log("Done hashing files.")
+    sys.stdout.write("\rHashing files.......Done\n")
+    sys.stdout.flush
 
     final_similarity_dict = {}
     
