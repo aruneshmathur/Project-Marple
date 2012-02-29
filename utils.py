@@ -3,6 +3,7 @@
 import os
 
 maxsize = 2048
+ignore_dirs=[".svn", ".git", ".hg"]
 
 def stripchars(s, chars):
     return s.translate(None, chars)
@@ -24,7 +25,7 @@ def list_files(path, dest_path):
 
 def get_file_list_path(path, dest_file):    
     for f in os.listdir(path):
-        if f == ".svn":
+        if f in ignore_dirs:
             continue
         if os.path.isdir(path + '/' + f) == True:
             get_file_list_path(path + '/' + f, dest_file)
