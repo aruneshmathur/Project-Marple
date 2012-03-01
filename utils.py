@@ -2,13 +2,23 @@
 
 import os, yaml
 
-maxsize = 4096
+maxsize = 2048
 ignore_dirs=[".svn", ".git", ".hg", ".gitignore"]
+ignore_ext=[".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pps", ".ppsx",
+            ".pptx", ".bmp", ".png", ".gif", ".jpeg", ".jpg"]
 
 folder="DIR"
 files="FILES"
 
 yaml_sep = "---"
+
+def check_url(url):
+    for ext in ignore_ext:
+        if url.endswith(ext):
+            return False
+
+    return True
+
 
 def stripchars(s, chars):
     return s.translate(None, chars)
@@ -24,14 +34,17 @@ def unique_elements(ele_list):
 
 def record_files(path, dest_path, compare = False):
     
-    stream = open(dest_path, 'a')
+    stream = open(dest_path, "a+")
     path = os.path.abspath(path)
+
+    file_count = 0
     
     for ele in os.listdir(path):
         innerpath = path + '/' + ele
         if os.path.isdir(innerpath):
 
             dirlist = get_subdirs(innerpath)
+            file_count = file_count + len(dirlist)
 
             if compare is False:
                 datadir = {
@@ -48,8 +61,14 @@ def record_files(path, dest_path, compare = False):
                     yaml.dump(e, stream)
 
         else:
-            stream.write(yaml_sep + '\n')
-            yaml.dump(innerpath, stream)
+        
+            if check_url(innerpath):
+                stream.write(yaml_sep + '\n')
+                yaml.dump(innerpath, stream)
+                file_count = file_count + 1
+
+    #stream.seek(0, 0)
+    #yaml.dump(file_count, stream)
 
     stream.close()
 
@@ -66,7 +85,7 @@ def get_subdirs(path):
            returnlist.extend(get_subdirs(innerpath))
        
         else:
-            if os.path.getsize(innerpath) < maxsize:
+            if os.path.getsize(innerpath) < maxsize and check_url(innerpath):
                 returnlist.append(innerpath)
     
     return returnlist

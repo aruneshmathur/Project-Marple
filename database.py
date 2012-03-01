@@ -72,12 +72,17 @@ class WinnowDB:
             self.conn.commit()
 
 
-    def get_filenames(self, hash_value, except_file):
+    def get_filenames(self, hash_value, except_file, not_like):
 
         result_set = []
+        add_q = ""
+
+        if not_like is not None:
+            add_q = " AND " + file_path_key + " NOT LIKE '" + not_like + "%'"
+
         self.cursor.execute("SELECT DISTINCT " + file_path_key +
                             " FROM " + self.table2 + " WHERE " + hash_key + " = "
-                            + str(hash_value) + ";")
+                            + str(hash_value) + add_q + ";")
 
         for row in self.cursor:
             if row[0] != except_file:

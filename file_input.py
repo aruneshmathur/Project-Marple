@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from format_hash_winnow import hash_kgrams, winnow
-import utils, sys, os, comparison, html_dumper, database
+import utils, sys, os, comparison, html_dumper, database, yaml
 
 
 name = "filename"
@@ -11,99 +11,116 @@ threshold = 30
 k_gram = 50
 w_window = 100
 
-def process_files(files_list, ignore_file_list):
+def compare(db, file_path, not_like):
+
+    hash_list = db.get_hashes(file_path)
+    similar = {}
+
+    for h in hash_list:
+
+        for sim in db.get_filenames(h, file_path, not_like):
+            similar[sim] = similar.get(sim,0) + 1
+
+                
+    return [x for x in similar.keys() 
+            if similar[x] > threshold]     
+
+
+def process(file_path):
+        lines = ""
+        for line in open(file_path, 'r'):
+            lines = lines + utils.stripchars(line, chars)
+
+        hash_list = hash_kgrams(lines, k_gram)
+
+        if hash_list is None:
+            return None
+
+        winnow_list = winnow(hash_list, w_window)
+
+        return winnow_list
+
+
+def process_files(files_yaml, ignore_files_yaml):
 
     db = database.WinnowDB()
     db.clear()
     db.setup()
 
-    log = 0
-    size = len(ignore_file_list)
+    #log = 0
+    #size = len(ignore_file_list)
 
-    for f in ignore_file_list:
+    for f in yaml.load_all(open(ignore_files_yaml, 'r')):
         
-        sys.stdout.write("\rHashing Ignore files.......%d%%" % ((100 * log) / size))
-        sys.stdout.flush()
-        log = log + 1
+        #sys.stdout.write("\rHashing Ignore files.......%d%%" % ((100 * log) / size))
+        #sys.stdout.flush()
+        #log = log + 1
 
-        lines = ""
-        for line in open(f, 'r'):
-            lines = lines + utils.stripchars(line, chars)
+        res = process(f)
+        if res is not None:
+            db.insert_ignore_list(res)
 
-        hash_list = hash_kgrams(lines, k_gram)
-
-        if hash_list is None:
-            continue
-
-        winnow_list = winnow(hash_list, w_window)
-
-        db.insert_ignore_list(winnow_list)
-
-    sys.stdout.write("\rHashing Ignore files.......Done\n")
-    sys.stdout.flush()
+    #sys.stdout.write("\rHashing Ignore files.......Done\n")
+    #sys.stdout.flush()
     
-    log = 0
-    size = len(files_list)
+    #log = 0
+    #size = len(files_list)
 
-    for f in files_list:
+    for ele in yaml.load_all(open(files_yaml, 'r')):
 
-        sys.stdout.write("\rHashing files.......%d%%" % ((100 * log) / size))
-        sys.stdout.flush()
-        log = log + 1
+        #sys.stdout.write("\rHashing files.......%d%%" % ((100 * log) / size))
+        #sys.stdout.flush()
+        #log = log + 1
 
-        lines = ""
-        for line in open(f, 'r'):
-            lines = lines + utils.stripchars(line, chars)
+        if type(ele) is dict:
+            for f in ele[utils.files]:
+                res = process(f)
+                if res is not None:
+                    db.insert_file_hash(f, res)
 
-        hash_list = hash_kgrams(lines, k_gram)
+        elif type(ele) is str:
+            res = process(ele)
 
-        if hash_list is None:
-            #utils.log("Is " + f + " empty?")
-            continue
-
-        winnow_list = winnow(hash_list, w_window)
-
-        db.insert_file_hash(f, winnow_list)
+            if res is not None:
+                db.insert_file_hash(ele, res)
 
 
-    #utils.log("Done hashing files.")
-    sys.stdout.write("\rHashing files.......Done\n")
-    sys.stdout.flush
 
-    final_similarity_dict = {}
+    utils.log("Done hashing files.")
+    #sys.stdout.write("\rHashing files.......Done\n")
+    #sys.stdout.flush
+
+    sim_dict = {}
     
-    for f in files_list:
+    for ele in yaml.load_all(open(files_yaml, 'r')):
 
-        utils.log("Looking for files similar to " + f)
-        hash_list = db.get_hashes(f)
-        similar_to_file = {}
+        if type(ele) is dict:
+            for f in ele[utils.files]:
+                utils.log("Looking for files similar to " + f)
+                sim_dict[f] = compare(db, f, ele[utils.folder])
+                utils.log("Done looking.")
 
-        for h in hash_list:
-            similar_file_list = db.get_filenames(h, f)
 
-            for sim in similar_file_list:
-                similar_to_file[sim] = similar_to_file.get(sim,0) + 1
-                
-        final_similarity_dict[f] = [x for x in similar_to_file.keys() 
-                                    if similar_to_file[x] > threshold]     
-        utils.log("Done looking.")
+        elif type(ele) is str:
+            utils.log("Looking for files similar to " + ele)
+            sim_dict[ele] = compare(db, ele, None)
+            utils.log("Done looking.")  
      
     #db.close()
 
-    return final_similarity_dict
+    return sim_dict
 
 
 
 if __name__ == '__main__':
 
 
-    file_list = [x.rstrip('\n') for x in open("list.txt", "r")]
-    ignore_file_list = [x.rstrip('\n') for x in open("ignore.txt", "r")]
+    files_yaml = "list.yaml"
+    ignore_files_yaml = "ignore.yaml"
 
+    output_dict = os.path.abspath("/home/aruneshmathur/major-project/Projects/output")
 
-    output_dict = os.path.abspath("/home/aruneshmathur/major-project/Projects/output/")
-
-    sim_dict = process_files(file_list, ignore_file_list)
+    sim_dict = process_files(files_yaml, ignore_files_yaml)
 
     utils.log("Done comparing, generating output now.")
 
