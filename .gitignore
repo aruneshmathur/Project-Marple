@@ -5,3 +5,4 @@
 *.txt
 DB_settings.py
 *.swp
+*.yaml
