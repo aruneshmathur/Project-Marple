@@ -49,7 +49,7 @@ def record_files(path, dest_path, compare = False):
 
         else:
             stream.write(yaml_sep + '\n')
-            yaml.dump(ele, stream)
+            yaml.dump(innerpath, stream)
 
     stream.close()
 
