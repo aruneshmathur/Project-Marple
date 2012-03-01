@@ -1,9 +1,14 @@
 #!/usr/bin/python
 
-import os
+import os, yaml
 
-maxsize = 2048
-ignore_dirs=[".svn", ".git", ".hg"]
+maxsize = 4096
+ignore_dirs=[".svn", ".git", ".hg", ".gitignore"]
+
+folder="DIR"
+files="FILES"
+
+yaml_sep = "---"
 
 def stripchars(s, chars):
     return s.translate(None, chars)
@@ -17,22 +22,55 @@ def unique_elements(ele_list):
     return dic.keys()
 
 
-def list_files(path, dest_path):
-    f = open(dest_path, 'w')
-    get_file_list_path(os.path.abspath(path), f)
-    f.close()
+def record_files(path, dest_path, compare = False):
+    
+    stream = open(dest_path, 'a')
+    path = os.path.abspath(path)
+    
+    for ele in os.listdir(path):
+        innerpath = path + '/' + ele
+        if os.path.isdir(innerpath):
+
+            dirlist = get_subdirs(innerpath)
+
+            if compare is False:
+                datadir = {
+                    folder:innerpath, 
+                    files:dirlist
+                }
+                
+                stream.write(yaml_sep + '\n')
+                yaml.dump(datadir, stream)
+
+            else:
+                for e in dirlist:
+                    stream.write(yaml_sep + '\n')
+                    yaml.dump(e, stream)
+
+        else:
+            stream.write(yaml_sep + '\n')
+            yaml.dump(ele, stream)
+
+    stream.close()
 
 
-def get_file_list_path(path, dest_file):    
+def get_subdirs(path):  
+
+    returnlist = []
     for f in os.listdir(path):
         if f in ignore_dirs:
             continue
-        if os.path.isdir(path + '/' + f) == True:
-            get_file_list_path(path + '/' + f, dest_file)
-        else:
-            if os.path.getsize(path + '/' + f) < maxsize:
-                dest_file.write(path + '/' + f + '\n')
 
+        innerpath = path + '/' + f
+        if os.path.isdir(innerpath) == True:
+           returnlist.extend(get_subdirs(innerpath))
+       
+        else:
+            if os.path.getsize(innerpath) < maxsize:
+                returnlist.append(innerpath)
+    
+    return returnlist
+            
 
 def get_matrix(*shape):
     if len(shape) == 0:
