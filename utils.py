@@ -5,7 +5,10 @@ import os, yaml
 maxsize = 2048
 ignore_dirs=[".svn", ".git", ".hg", ".gitignore"]
 ignore_ext=[".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pps", ".ppsx",
-            ".pptx", ".bmp", ".png", ".gif", ".jpeg", ".jpg"]
+            ".pptx", ".bmp", ".png", ".gif", ".jpeg", ".jpg", ".bin", ".exe",
+            ".html", ".o", ".pyc", ".class", ".ico", ".mp3", ".avi", ".mkv",
+            ".wav", ".flv", ".mpg", ".mpeg", ".wma", ".3gp", ".mp4", ".ogg",
+            ".svg"]
 
 folder="DIR"
 files="FILES"
@@ -13,6 +16,13 @@ files="FILES"
 yaml_sep = "---"
 
 def check_url(url):
+
+    try:
+        url.decode('ascii')
+    except UnicodeDecodeError:
+        return False
+
+
     for ext in ignore_ext:
         if url.endswith(ext):
             return False
@@ -33,12 +43,12 @@ def unique_elements(ele_list):
 
 
 def record_files(path, dest_path, compare = False):
-    
+
     stream = open(dest_path, "a+")
     path = os.path.abspath(path)
 
     file_count = 0
-    
+
     for ele in os.listdir(path):
         innerpath = path + '/' + ele
         if os.path.isdir(innerpath):
@@ -66,9 +76,6 @@ def record_files(path, dest_path, compare = False):
                 stream.write(yaml_sep + '\n')
                 yaml.dump(innerpath, stream)
                 file_count = file_count + 1
-
-    #stream.seek(0, 0)
-    #yaml.dump(file_count, stream)
 
     stream.close()
 
