@@ -8,7 +8,7 @@ ignore_ext=[".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pps", ".
             ".pptx", ".bmp", ".png", ".gif", ".jpeg", ".jpg", ".bin", ".exe",
             ".html", ".o", ".pyc", ".class", ".ico", ".mp3", ".avi", ".mkv",
             ".wav", ".flv", ".mpg", ".mpeg", ".wma", ".3gp", ".mp4", ".ogg",
-            ".svg"]
+            ".svg", ".htm"]
 
 folder="DIR"
 files="FILES"
