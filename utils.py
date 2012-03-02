@@ -31,7 +31,7 @@ def check_url(url):
 
 
 def stripchars(s, chars):
-    return s.translate(None, chars)
+    return s.translate(None, chars).lower()
 
 
 def unique_elements(ele_list):
