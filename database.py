@@ -52,22 +52,30 @@ class WinnowDB:
 
     def insert_ignore_list(self, winnow_list):
         for w in winnow_list:
-            self.cursor.execute("INSERT IGNORE INTO " + self.table3 + " VALUES('" +
-                                str(w) + "');")
+            #self.cursor.execute("INSERT IGNORE INTO " + self.table3 + " VALUES('" +
+            #                    str(w) + "');")
+
+            self.cursor.execute("""INSERT IGNORE INTO """ + self.table3  + """ VALUES(%s);""",
+                                (w))
 
             self.conn.commit()
 
 
     def insert_file_hash(self, name, winnow_list):
-        self.cursor.execute("INSERT INTO " + self.table1 + " VALUES('" + name +
-                            "');")
+        #self.cursor.execute("INSERT INTO " + self.table1 + " VALUES('" + name +
+        #                    "');")
+
+        self.cursor.execute("""INSERT INTO """ + self.table1  + """ VALUES(%s);""", (name))
 
         self.conn.commit()
 
         for w in winnow_list:
 
-            self.cursor.execute("INSERT INTO " + self.table2 + " VALUES('" +
-                               name + "', " + str(w) + ");")
+            #self.cursor.execute("INSERT INTO " + self.table2 + " VALUES('" +
+            #                   name + "', " + str(w) + ");")
+
+            self.cursor.execute("""INSERT INTO """ + self.table2  + """ VALUES(%s, %s);""",
+                                (name, w))
 
             self.conn.commit()
 
@@ -78,11 +86,27 @@ class WinnowDB:
         add_q = ""
 
         if not_like is not None:
-            add_q = " AND " + file_path_key + " NOT LIKE '" + not_like + "%'"
+            self.cursor.execute("""SELECT DISTINCT """ + file_path_key +
+                                """ FROM """ + self.table2 + """ WHERE """ +
+                                hash_key + """ = %s AND """ + file_path_key +
+                                """NOT LIKE %s%;""", (hash_value, not_like))
 
-        self.cursor.execute("SELECT DISTINCT " + file_path_key +
-                            " FROM " + self.table2 + " WHERE " + hash_key + " = "
-                            + str(hash_value) + add_q + ";")
+            #add_q = " AND " + file_path_key + " NOT LIKE '" + not_like + "%'"
+
+        else:
+            self.cursor.execute("""SELECT DISTINCT """ + file_path_key +
+                                """ FROM """ + self.table2 + """ WHERE """ +
+                                hash_key + """ = %s;""", (hash_value))
+            
+
+        #self.cursor.execute("SELECT DISTINCT " + file_path_key +
+        #                    " FROM " + self.table2 + " WHERE " + hash_key + " = "
+        #                    + str(hash_value) + add_q + ";")
+
+        #self.cursor.execute("""SELECT DISTINCT """ + file_path_key +
+        #                    """ FROM """ + self.table2 + """ WHERE """ +
+        #                    hash_key + """ = %s;""", (hash_value))
+
 
         for row in self.cursor:
             if row[0] != except_file:
@@ -95,8 +119,14 @@ class WinnowDB:
 
         result_set = []
 
-        self.cursor.execute("SELECT " + hash_key + " FROM " + self.table2 + " WHERE " + file_path_key + 
-                            " = '" + file_name + "' AND " +  hash_key + " NOT IN (SELECT * FROM " + self.table3 + ");")
+        #self.cursor.execute("SELECT " + hash_key + " FROM " + self.table2 + " WHERE " + file_path_key + 
+        #                    " = '" + file_name + "' AND " +  hash_key + " NOT IN (SELECT * FROM " + self.table3 + ");")
+
+        self.cursor.execute("""SELECT """ + hash_key + """ FROM """ +
+                            self.table2 + """ WHERE """ + file_path_key + 
+                            """ = %s AND """ +  hash_key + """ NOT IN (SELECT *
+                            FROM """ + self.table3 + """);""", (file_name))
+
         for row in self.cursor:
             result_set.append(row[0])
 
