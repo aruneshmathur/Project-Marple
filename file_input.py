@@ -11,14 +11,17 @@ threshold = 30
 k_gram = 50
 w_window = 100
 
-def compare(db, file_path, not_like):
+def compare(db, except_file, not_like):
 
-    hash_list = db.get_hashes(file_path)
+    hash_list = db.get_hashes(except_file)
     similar = {}
+
+    if not_like is not None:
+        except_file = None
 
     for h in hash_list:
 
-        for sim in db.get_filenames(h, file_path, not_like):
+        for sim in db.get_filenames(h, except_file, not_like):
             similar[sim] = similar.get(sim,0) + 1
 
                 
@@ -76,13 +79,13 @@ def process_files(files_yaml, ignore_files_yaml):
             for f in ele[utils.files]:
                 res = process(f)
                 if res is not None:
-                    db.insert_file_hash(f, res)
+                    db.insert_file_hash(f, ele[utils.folder], res)
 
         elif type(ele) is str:
             res = process(ele)
 
             if res is not None:
-                db.insert_file_hash(ele, res)
+                db.insert_file_hash(ele, None, res)
 
 
 
