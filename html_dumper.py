@@ -64,7 +64,7 @@ def form_HTML(path, lines):
     
     for line in open(path, 'r'):
         if color_dict.has_key(i):
-            html_str = html_str + "<font color=" + color_dict[i] + ">" + line + "</font>"
+            html_str = html_str + "<font color=" + color_dict[i] + "><xmp>" + line + "</xmp></font>"
 
         else:
             html_str = html_str + line
