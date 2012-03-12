@@ -7,7 +7,7 @@ import utils, sys, os, comparison, html_dumper, database, yaml
 name = "filename"
 content = "content"
 chars = " \'\";()#\n{}-*|=/"
-threshold = 30
+threshold = 00
 k_gram = 50
 w_window = 100
 
@@ -47,21 +47,21 @@ def process(file_path):
 def process_files(files_yaml, ignore_files_yaml):
 
     db = database.WinnowDB()
-    db.clear()
-    db.setup()
+#    db.clear()
+#    db.setup()
 
     #log = 0
     #size = len(ignore_file_list)
 
-    for f in yaml.load_all(open(ignore_files_yaml, 'r')):
+#    for f in yaml.load_all(open(ignore_files_yaml, 'r')):
         
         #sys.stdout.write("\rHashing Ignore files.......%d%%" % ((100 * log) / size))
         #sys.stdout.flush()
         #log = log + 1
 
-        res = process(f)
-        if res is not None:
-            db.insert_ignore_list(res)
+#        res = process(f)
+#        if res is not None:
+#            db.insert_ignore_list(res)
 
     #sys.stdout.write("\rHashing Ignore files.......Done\n")
     #sys.stdout.flush()
@@ -69,23 +69,23 @@ def process_files(files_yaml, ignore_files_yaml):
     #log = 0
     #size = len(files_list)
 
-    for ele in yaml.load_all(open(files_yaml, 'r')):
+#    for ele in yaml.load_all(open(files_yaml, 'r')):
 
         #sys.stdout.write("\rHashing files.......%d%%" % ((100 * log) / size))
         #sys.stdout.flush()
         #log = log + 1
 
-        if type(ele) is dict:
-            for f in ele[utils.files]:
-                res = process(f)
-                if res is not None:
-                    db.insert_file_hash(f, ele[utils.folder], res)
+#        if type(ele) is dict:
+#            for f in ele[utils.files]:
+#                res = process(f)
+#                if res is not None:
+#                    db.insert_file_hash(f, ele[utils.folder], res)
 
-        elif type(ele) is str:
-            res = process(ele)
+#        elif type(ele) is str:
+#            res = process(ele)
 
-            if res is not None:
-                db.insert_file_hash(ele, None, res)
+#            if res is not None:
+#                db.insert_file_hash(ele, None, res)
 
 
 

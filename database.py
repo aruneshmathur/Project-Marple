@@ -83,13 +83,12 @@ class WinnowDB:
 
         if except_file is None and not_like is not None:
             self.cursor.execute("""SELECT DISTINCT s1.""" + file_path_key + """ 
-                                FROM (SELECT * FROM """ + self.table1 + """
-                                WHERE """ + dir_path_key + 
-                                """!=%s) AS s1 JOIN (SELECT * FROM """ 
+                                FROM """ + self.table1 + """ AS s1 JOIN (SELECT * FROM """ 
                                 + self.table2 + """ WHERE """ + hash_key 
                                 + """=%s) AS s2 ON s1.""" + file_path_key 
-                                + """=s2.""" + file_path_key + """;""",
-                                (not_like, hash_value))
+                                + """=s2.""" + file_path_key + """ AND s1.""" +
+                                dir_path_key + """!=%s;""",
+                                (hash_value, not_like))
 
             for row in self.cursor:
                 result_set.append(row[0])
