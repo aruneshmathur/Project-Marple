@@ -6,7 +6,7 @@ import utils, sys, os, comparison, html_dumper, database, yaml
 
 name = "filename"
 content = "content"
-chars = " \'\";()#\n{}-*|=/"
+chars = " \'\";()#\n{}-*|=/\r"
 threshold = 00
 k_gram = 50
 w_window = 100
