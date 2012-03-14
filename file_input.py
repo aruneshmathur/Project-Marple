@@ -49,23 +49,23 @@ def process(file_path):
 def process_files(files_yaml, ignore_files_yaml):
 
     db = database.WinnowDB()
-#    db.clear()
-#    db.setup()
-#    db.add_index()
+    db.clear()
+    db.setup()
+    db.add_index()
 
     #log = 0
     #size = len(ignore_file_list)
     utils.log("Starting to hash Ignore files.")
 
-#    for f in yaml.load_all(open(ignore_files_yaml, 'r')):
+    for f in yaml.load_all(open(ignore_files_yaml, 'r')):
         
         #sys.stdout.write("\rHashing Ignore files.......%d%%" % ((100 * log) / size))
         #sys.stdout.flush()
         #log = log + 1
 
-#        res = process(f)
-#        if res is not None:
-#            db.insert_ignore_list(res)
+        res = process(f)
+        if res is not None:
+            db.insert_ignore_list(res)
 
     utils.log("Done hashing Ignore files.")
 
@@ -75,25 +75,25 @@ def process_files(files_yaml, ignore_files_yaml):
     #log = 0
     #size = len(files_list)
 
-    utils.log("Starting to has Project files.")
+    utils.log("Starting to hash Project files.")
 
-#    for ele in yaml.load_all(open(files_yaml, 'r')):
+    for ele in yaml.load_all(open(files_yaml, 'r')):
 
         #sys.stdout.write("\rHashing files.......%d%%" % ((100 * log) / size))
         #sys.stdout.flush()
         #log = log + 1
 
-#        if type(ele) is dict:
-#            for f in ele[utils.files]:
-#                res = process(f)
-#                if res is not None:
-#                    db.insert_file_hash(f, ele[utils.folder], res)
+        if type(ele) is dict:
+            for f in ele[utils.files]:
+                res = process(f)
+                if res is not None:
+                    db.insert_file_hash(f, ele[utils.folder], res)
 
-#        elif type(ele) is str:
-#            res = process(ele)
+        elif type(ele) is str:
+            res = process(ele)
 
-#            if res is not None:
-#                db.insert_file_hash(ele, None, res)
+            if res is not None:
+                db.insert_file_hash(ele, None, res)
 
 
 
