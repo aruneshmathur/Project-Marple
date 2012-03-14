@@ -8,7 +8,8 @@ ignore_ext=[".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pps", ".
             ".pptx", ".bmp", ".png", ".gif", ".jpeg", ".jpg", ".bin", ".exe",
             ".html", ".o", ".pyc", ".class", ".ico", ".mp3", ".avi", ".mkv",
             ".wav", ".flv", ".mpg", ".mpeg", ".wma", ".3gp", ".mp4", ".ogg",
-            ".svg", ".htm", ".vcproj", ".vcxproj", ".cache"]
+            ".svg", ".htm", ".vcproj", ".vcxproj", ".cache", ".fnt", ".fon",
+            ".otf", ".ttf"]
 
 folder="DIR"
 files="FILES"
@@ -24,7 +25,7 @@ def check_url(url):
 
 
     for ext in ignore_ext:
-        if url.endswith(ext):
+        if url.lower().endswith(ext):
             return False
 
     return True
