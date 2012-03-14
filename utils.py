@@ -109,14 +109,14 @@ def get_matrix(*shape):
     return [get_matrix(*cdr) for i in range(car)]
 
 
-def file_contents_line_numbers(filename):
+def file_contents_line_numbers(filename, chars):
 
     i = 1
     line_content = ""
     line_numbers = []
 
     for line in open(filename, 'r'):
-        line = stripchars(line, " \n	")    
+        line = stripchars(line, chars)    
         line_content = line_content + line
 	line_numbers.extend([i for char in line])
         i = i + 1    

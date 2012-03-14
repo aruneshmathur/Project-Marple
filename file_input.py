@@ -7,7 +7,7 @@ import utils, sys, os, comparison, html_dumper, database, yaml
 name = "filename"
 content = "content"
 chars = " \'\";()#\n{}-*|=/"
-threshold = 30
+threshold = 00
 k_gram = 50
 w_window = 100
 
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 
     for k in sim_dict.keys():
         a = {}
-        (a[comparison.text], a[comparison.line_no]) = utils.file_contents_line_numbers(k)
+        (a[comparison.text], a[comparison.line_no]) = utils.file_contents_line_numbers(k, chars)
 
         for f in sim_dict[k]:
             start = ""
@@ -160,7 +160,7 @@ if __name__ == '__main__':
 
 
             b = {}
-            (b[comparison.text], b[comparison.line_no]) = utils.file_contents_line_numbers(f)
+            (b[comparison.text], b[comparison.line_no]) = utils.file_contents_line_numbers(f, chars)
 
             res = comparison.LCS(a, b, threshold)
             result = {
