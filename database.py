@@ -52,6 +52,16 @@ class WinnowDB:
                             ignore_key+ ")) ENGINE=INNODB;")
 
 
+    def add_index(self):
+        self.cursor.execute("""ALTER TABLE """ + self.table1 + """ ADD INDEX
+                            IDX_DIR_PATH (""" + dir_path_key + """);""")
+
+        self.cursor.execute("""ALTER TABLE """ + self.table2 + """ ADD INDEX
+                            IDX_HASH (""" + hash_key + """);""")
+
+
+
+
     def insert_ignore_list(self, winnow_list):
         for w in winnow_list:
 
@@ -82,13 +92,13 @@ class WinnowDB:
         add_q = ""
 
         if except_file is None and not_like is not None:
-            self.cursor.execute("""SELECT DISTINCT s1.""" + file_path_key + """ 
-                                FROM """ + self.table1 + """ AS s1 JOIN (SELECT * FROM """ 
-                                + self.table2 + """ WHERE """ + hash_key 
-                                + """=%s) AS s2 ON s1.""" + file_path_key 
-                                + """=s2.""" + file_path_key + """ AND s1.""" +
-                                dir_path_key + """!=%s;""",
-                                (hash_value, not_like))
+            self.cursor.execute("""SELECT DISTINCT s1.""" + file_path_key + """
+                                FROM """ + self.table1 + """ AS s1 JOIN """ +
+                                self.table2 + """ AS s2 ON s1.""" +
+                                file_path_key + """ = s2.""" + file_path_key +
+                                """ WHERE s1.""" + dir_path_key + """ !=%s AND
+                                s2.""" + hash_key + """ =%s;""", (not_like,
+                                                                  hash_value))
 
             for row in self.cursor:
                 result_set.append(row[0])
