@@ -88,12 +88,14 @@ def process_files(files_yaml, ignore_files_yaml):
                 res = process(f)
                 if res is not None:
                     db.insert_file_hash(f, ele[utils.folder], res)
+                    utils.log("Hashed "+ f)
 
         elif type(ele) is str:
             res = process(ele)
 
             if res is not None:
                 db.insert_file_hash(ele, None, res)
+                utils.log("Hashed " + ele)
 
 
 
