@@ -9,7 +9,7 @@ ignore_ext=[".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pps", ".
             ".html", ".o", ".pyc", ".class", ".ico", ".mp3", ".avi", ".mkv",
             ".wav", ".flv", ".mpg", ".mpeg", ".wma", ".3gp", ".mp4", ".ogg",
             ".svg", ".htm", ".vcproj", ".vcxproj", ".cache", ".fnt", ".fon",
-            ".otf", ".ttf"]
+            ".otf", ".ttf", ".manifest"]
 
 folder="DIR"
 files="FILES"
@@ -116,7 +116,7 @@ def file_contents_line_numbers(filename, chars):
     line_numbers = []
 
     for line in open(filename, 'r'):
-        line = stripchars(line, chars)    
+        line = stripchars(line, '\n')    
         line_content = line_content + line
 	line_numbers.extend([i for char in line])
         i = i + 1    
