@@ -1,7 +1,8 @@
 #!/usr/bin/python
 from utils import unique_elements
 
-M = 5463458053
+#M = 5463458053
+M = 9220000000000000039
 B = 37
 
 def hash_kgrams(string, k):
