@@ -9,7 +9,7 @@ ignore_ext=[".doc", ".docx", ".odt", ".pdf", ".xls", ".xlsx", ".ppt", ".pps", ".
             ".html", ".o", ".pyc", ".class", ".ico", ".mp3", ".avi", ".mkv",
             ".wav", ".flv", ".mpg", ".mpeg", ".wma", ".3gp", ".mp4", ".ogg",
             ".svg", ".htm", ".vcproj", ".vcxproj", ".cache", ".fnt", ".fon",
-            ".otf", ".ttf", ".manifest"]
+            ".otf", ".ttf", ".manifest", ".resx", ".dll", ".csproj"]
 
 folder="DIR"
 files="FILES"
@@ -73,7 +73,7 @@ def record_files(path, dest_path, compare = False):
 
         else:
         
-            if check_url(innerpath):
+            if os.path.exists(innerpath) and check_url(innerpath):
                 stream.write(yaml_sep + '\n')
                 yaml.dump(innerpath, stream)
                 file_count = file_count + 1
@@ -93,7 +93,7 @@ def get_subdirs(path):
            returnlist.extend(get_subdirs(innerpath))
        
         else:
-            if os.path.getsize(innerpath) < maxsize and check_url(innerpath):
+            if os.path.exists(innerpath) and check_url(innerpath) and os.path.getsize(innerpath) < maxsize:
                 returnlist.append(innerpath)
     
     return returnlist
