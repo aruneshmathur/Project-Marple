@@ -6,8 +6,8 @@ import utils, sys, os, comparison, html_dumper, database, yaml
 
 name = "filename"
 content = "content"
-chars = " \'\";()#\n{}-*|=/\r"
-threshold = 00
+chars = " \'\";()#\n{}-*|=/\r.,"
+threshold = 30
 k_gram = 50
 w_window = 100
 
@@ -21,7 +21,6 @@ def compare(db, except_file, not_like):
         except_file = None
 
     for h in hash_list:
-        utils.log("Hash " +str(h))
 
         for sim in db.get_filenames(h, except_file, not_like):
             similar[sim] = similar.get(sim,0) + 1
@@ -51,7 +50,6 @@ def process_files(files_yaml, ignore_files_yaml):
     db = database.WinnowDB()
     db.clear()
     db.setup()
-    db.add_index()
 
     #log = 0
     #size = len(ignore_file_list)
@@ -102,6 +100,8 @@ def process_files(files_yaml, ignore_files_yaml):
     utils.log("Done hashing Project files.")
     #sys.stdout.write("\rHashing files.......Done\n")
     #sys.stdout.flush
+
+    db.add_index()
 
     sim_dict = {}
     
