@@ -64,10 +64,10 @@ def form_HTML(path, lines):
     
     for line in open(path, 'r'):
         if color_dict.has_key(i):
-            html_str = html_str + "<font color=" + color_dict[i] + "><xmp>" + line.rstrip() + "</xmp></font>"
+            html_str = html_str + "<font color=" + color_dict[i] + "><xmp style=\"margin:0\">" + line + "</xmp></font>"
 
         else:
-            html_str = html_str + line.rstrip()
+            html_str = html_str + "<font color=black><xmp style=\"margin:0\">" + line + "</xmp></font>"
 
         i = i + 1
 
